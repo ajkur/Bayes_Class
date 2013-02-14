@@ -181,7 +181,19 @@ I began by doing a test run of 1000 iterations with no burn in or thinning. From
 
 
 \begin{homeworkProblem}
-Write out the steps for your slice sampler, use h1 tails to boost U?
+
+In a standard slice sampler, you would pick a starting value for $\theta$. However, because in this case we are able to sample off of $h_1(\theta)$, we can choose the starting value for our chain by sampling from this distribution. This in turn cuts down on the burn in time. From here, we would proceed with slice sampling as follows:
+
+Use $\theta_0$ generated from $h_1(\theta)$ to calculate $h(\theta_0) = h_1(\theta_0) h_2(\theta_0)$.
+
+Sample $U$ from $Uniform (0, h(\theta_0))$.
+
+Search for the intercepts of $U$ and $h(\theta_0)$, denoted as $\theta_L$ and $\theta_R$.
+
+Sample $\theta_1$ from $Uniform (\theta_L, \theta_R)$.
+
+Repeat.
+
 \end{homeworkProblem}
 
 
@@ -221,7 +233,7 @@ The following code is a Slice Sampling algorithm written in Python for the data 
 
 \begin{homeworkProblem}
 
-I used the same methods stated in Problem 2 to choose the Burn In and Thinning for each case. The main differences to take note of between the posteriors are that the means sampled from the Informed and Uniform priors are both slightly higher than that of the diffuse Gamma prior. Additionally, the posterior generated from the Uniform prior has a larger tail on the right hand side, due to the fact that the Uniform prior was given the range from 0 to 20.
+I used the same methods stated in Problem 2 to choose the Burn In and Thinning for each case. The main differences to take note of between the posteriors (Fig.~\ref{fig:p6_a}-\ref{fig:p6_c}) are that the means sampled from the Informed and Uniform priors are both slightly higher than that of the diffuse Gamma prior. Additionally, the posterior generated from the Uniform prior has a larger tail on the right hand side, due to the fact that the Uniform prior was given the range from 0 to 20.
 
 \begin{table}[h]
 \caption{Comparison of Specified Priors}
@@ -239,7 +251,25 @@ I used the same methods stated in Problem 2 to choose the Burn In and Thinning f
 \label{tab_p6}
 \end{table}
 
-\begin{figure}[h]
+The effect of assigning a Uniform prior becomes much more apparent when we examine the probability that $\theta$ is greater than 0.5 (Tab.~\ref{tab_p6_b}).
+
+\begin{table}[h]
+\caption{Probablity that $\theta$ is greater than 0.5}
+\begin{center}
+  \begin{tabular}{cccc}
+    \hline\noalign{\smallskip}
+    Prior & Probability \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+    Diffuse Gamma(0.001,0.001) & 0.0065\\
+    Informed Gamma(1.11,1.61) & 0.006\\ 
+    Uniform(0,20) & 0.0179\\ 
+    \noalign{\smallskip}\hline
+  \end{tabular}
+\end{center}
+\label{tab_p6_b}
+\end{table}
+
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[height=3.0in]{./Figures/Prob6/A/theta}
 \end{center}
@@ -247,7 +277,7 @@ I used the same methods stated in Problem 2 to choose the Burn In and Thinning f
 \label{fig:p6_a}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[height=3.0in]{./Figures/Prob6/B/theta}
 \end{center}
@@ -255,7 +285,7 @@ I used the same methods stated in Problem 2 to choose the Burn In and Thinning f
 \label{fig:p6_b}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[height=3.0in]{./Figures/Prob6/C/theta}
 \end{center}
@@ -263,14 +293,12 @@ I used the same methods stated in Problem 2 to choose the Burn In and Thinning f
 \label{fig:p6_c}
 \end{figure}
 
-Compute probability that lambda is greater than 0.5. Need to get full sample data somehow and run a script on it. P(lambda>0.5) = Number of samples over 0.5 / Total number of samples. do this for each prior also.
-
 \end{homeworkProblem}
 
 
 \begin{homeworkProblem}
 
-Once again, Burn In and Thinning were determined in the same fashion as Problem 2, with the main difference being that I had to examine multiple posterior distributions for convergence and autocorrelation. The results are as follows.
+Once again, Burn In and Thinning were determined in the same fashion as Problem 2, with the main difference being that I had to examine multiple posterior distributions for convergence and autocorrelation. Upon looking at the means of $\mu$, I realized that the multivariate normal distribution was not working properly. I am probably specifying something incorrectly. Including any further analysis at this point would be useless, however I will run the model again in my free time once I figure out how to properly implement a multivariate normal distribution in PyMC.
 
 \begin{table}[h]
 \caption{Burn In and Thinning for Informed and Uninformed Priors}
@@ -280,7 +308,7 @@ Once again, Burn In and Thinning were determined in the same fashion as Problem 
     Priors & Burn In & Thinning \\
     \noalign{\smallskip}\hline\noalign{\smallskip}
     Informed & 20,000 & 15\\
-    Uninformed & 20,000 & 25\\ 
+    Uninformed & 10,000 & 25\\ 
     \noalign{\smallskip}\hline
   \end{tabular}
 \end{center}
@@ -317,12 +345,6 @@ $\tau_1$ & $\tau_2$ \\
 \label{tab:p7_U}
 \end{table}
 
-The most notable difference was that choosing informed priors lead to less diffuse posteriors with lower autocorrelation.
-
-Compute the probability that the difference of the means is greater than zero.
-Compute the posterior probability that the ratio of the standard deviations is greater than 1.
-
-Is this a good diagnostic?
 
 \end{homeworkProblem}
 

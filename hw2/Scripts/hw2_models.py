@@ -40,12 +40,13 @@ def prob_7(w_prior):
 
     low_data = np.array([91., 46., 95., 60., 33., 410., 105., 43., 189., 1097., 54., 178., 114., 137., 233., 101., 25., 70., 357.])
     nor_data = np.array([370., 267., 99., 157., 75., 1281., 48., 298., 268., 62., 804., 430., 171., 694., 404.])
+    all_data = np.array([91., 46., 95., 60., 33., 410., 105., 43., 189., 1097., 54., 178., 114., 137., 233., 101., 25., 70., 357., 370., 267., 99., 157., 75., 1281., 48., 298., 268., 62., 804., 430., 171., 694., 404.])
 
     if w_prior == 1:
         mu_low = pymc.Uninformative('mu_low', value=1.)
         mu_nor = pymc.Uninformative('mu_nor', value=1.)
-        tau_low = pymc.Uninformative('tau_low', value=10.)
-        tau_nor = pymc.Uninformative('tau_nor', value=10.)
+        tau_low = pymc.Uninformative('tau_low', value=1.)
+        tau_nor = pymc.Uninformative('tau_nor', value=1.)
         
     elif w_prior == 2:
         mu_low = pymc.Normal('mu_low', mu=4.87, tau=0.003)
@@ -53,7 +54,8 @@ def prob_7(w_prior):
         tau_low = pymc.Gamma('tau_low', alpha=1.04, beta=0.001)
         tau_nor = pymc.Gamma('tau_nor', alpha=1.054, beta=0.001)
     
-    y_low = Normal('y_low', value=low_data, mu=mu_low, tau=tau_low, observed=True)
-    y_nor = Normal('y_nor', value=nor_data, mu=mu_nor, tau=tau_nor, observed=True)
+    # y_low = Normal('y_low', value=low_data, mu=mu_low, tau=tau_low, observed=True)
+    # y_nor = Normal('y_nor', value=nor_data, mu=mu_nor, tau=tau_nor, observed=True)
+    y_mean = MvNormal('y_mean', value=low_data, mu=np.array([mu_low,mu_nor]), tau=np.array([[tau_low,0.0],[0.0,tau_nor]]), observed=True)
 
     return vars()
