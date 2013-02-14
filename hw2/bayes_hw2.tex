@@ -153,6 +153,85 @@
 
 \clearpage
 \begin{homeworkProblem}
+Reading Assignment.
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}
+
+I began by doing a test run of 1000 iterations with no burn in or thinning. From the traces of $\mu$ and $\sigma$, I saw that both had converged within a few iterations. So, I burned 100 iterations because running the model is not computationally expensive. Then, I ran the model again and observed significant autocorrelation of $\mu$ within about 15 itterations, so I selected to thin the results by 15. Fig.~\ref{fig:p2_mu} and Fig.~\ref{fig:p2_sigma} are the resulting posterior summaries after 10,000 iterations.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[height=2.75in]{./Figures/Prob2/y_mean}
+\end{center}
+\caption{Posterior summary for $\mu$ using PyMC}
+\label{fig:p2_mu}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[height=2.75in]{./Figures/Prob2/sigma}
+\end{center}
+\caption{Posterior summary for $\sigma$ using PyMC}
+\label{fig:p2_sigma}
+\end{figure}
+
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}
+Write out the steps for your slice sampler, use h1 tails to boost U?
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}
+
+\code{./Scripts/mh_sampler.py}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[height=3.0in]{./Figures/Prob4/mu_hist}
+\end{center}
+\caption{Posterior summary for $\mu$ using Metropoils-Hastings}
+\label{fig:p4_mu}
+\end{figure}
+
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}
+
+\code{./Scripts/slice_sampler.py}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[height=3.0in]{./Figures/Prob5/mu_hist}
+\end{center}
+\caption{Posterior summary for $\mu$ using Slice Sampling}
+\label{fig:p5_mu}
+\end{figure}
+
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}
+
+For each Prior: Differences in posterior, what was the thin and burn?
+
+Compute probability that lambda is greater than 0.5. Need to get full sample data somehow and run a script on it. P(lambda>0.5) = Number of samples over 0.5 / Total number of samples. do this for each prior also.
+
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}
+
+For each Prior: Differences in posterior, what was the thin and burn?
+
+Compute the probability that the difference of the means is greater than zero.
+Compute the posterior probability that the ratio of the standard deviations is greater than 1.
+
+Is this a good diagnostic?
 
 \end{homeworkProblem}
 
