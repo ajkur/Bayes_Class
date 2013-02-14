@@ -20,13 +20,13 @@ def plot_trace(x_l, n_l, file_path):
 data = np.array([3.7, 3.4, 5.5, 5.0, 5.4, 6.6, 4.8, 4.4, 5.1, 5.4])
 
 # MH Sampling
-x_chain, n_chain, acc = mh_sampler.mh_sample(5000,data,10.0,2.0)
-
+x_chain, n_chain, acc = mh_sampler.mh_sample(10000,data,6.0,2.0)
+print acc
 plot_hist(x_chain[:acc+1], '../Figures/Prob4/mu_hist.pdf')
 plot_trace(x_chain[:acc+1], n_chain[:acc+1], '../Figures/Prob4/mu_trace.pdf')
 
 # Slice Sampling
-n = 1000
+n = 10000
 x_chain = slice_sampler.slice_sample(n,data,10.0)
 n_chain = np.arange(1,n+2,1)
 plot_hist(x_chain, '../Figures/Prob5/mu_hist.pdf')

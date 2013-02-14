@@ -187,6 +187,8 @@ Write out the steps for your slice sampler, use h1 tails to boost U?
 
 \begin{homeworkProblem}
 
+The following code is a Metropolis-Hastings algorithm written in Python for the data given in Problem 2 with $\sigma = 1$. A poster summary for $\mu$ is given in Fig.~\ref{fig:p4_mu} for 10000 iterations. Roughly 10\% of the samples were accepted.
+
 \code{./Scripts/mh_sampler.py}
 
 \begin{figure}[ht]
@@ -201,6 +203,8 @@ Write out the steps for your slice sampler, use h1 tails to boost U?
 
 
 \begin{homeworkProblem}
+
+The following code is a Slice Sampling algorithm written in Python for the data given in Problem 2 with $\sigma = 1$. A poster summary for $\mu$ is given in Fig.~\ref{fig:p5_mu} for 10000 iterations.
 
 \code{./Scripts/slice_sampler.py}
 
@@ -217,7 +221,47 @@ Write out the steps for your slice sampler, use h1 tails to boost U?
 
 \begin{homeworkProblem}
 
-For each Prior: Differences in posterior, what was the thin and burn?
+I used the same methods stated in Problem 2 to choose the Burn In and Thinning for each case. The main differences to take note of between the posteriors are that the means sampled from the Informed and Uniform priors are both slightly higher than that of the diffuse Gamma prior. Additionally, the posterior generated from the Uniform prior has a larger tail on the right hand side, due to the fact that the Uniform prior was given the range from 0 to 20.
+
+\begin{table}[h]
+\caption{Comparison of Specified Priors}
+\begin{center}
+  \begin{tabular}{cccc}
+    \hline\noalign{\smallskip}
+    Prior & Iterations & Burn In & Thinning \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+    Diffuse Gamma(0.001,0.001) & 50,000 & 10,000 & 20\\
+    Informed Gamma(1.11,1.61) & 30,000 & 10,000 & 20\\ 
+    Uniform(0,20) & 30,000 & 4,000 & 15\\ 
+    \noalign{\smallskip}\hline
+  \end{tabular}
+\end{center}
+\label{tab_p6}
+\end{table}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[height=3.0in]{./Figures/Prob6/A/theta}
+\end{center}
+\caption{Posterior summary for $\theta$ using a diffuse gamma prior}
+\label{fig:p6_a}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[height=3.0in]{./Figures/Prob6/B/theta}
+\end{center}
+\caption{Posterior summary for $\theta$ using an informed gamma prior}
+\label{fig:p6_b}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[height=3.0in]{./Figures/Prob6/C/theta}
+\end{center}
+\caption{Posterior summary for $\theta$ using a uniform prior}
+\label{fig:p6_c}
+\end{figure}
 
 Compute probability that lambda is greater than 0.5. Need to get full sample data somehow and run a script on it. P(lambda>0.5) = Number of samples over 0.5 / Total number of samples. do this for each prior also.
 
@@ -226,7 +270,54 @@ Compute probability that lambda is greater than 0.5. Need to get full sample dat
 
 \begin{homeworkProblem}
 
-For each Prior: Differences in posterior, what was the thin and burn?
+Once again, Burn In and Thinning were determined in the same fashion as Problem 2, with the main difference being that I had to examine multiple posterior distributions for convergence and autocorrelation. The results are as follows.
+
+\begin{table}[h]
+\caption{Burn In and Thinning for Informed and Uninformed Priors}
+\begin{center}
+  \begin{tabular}{cccc}
+    \hline\noalign{\smallskip}
+    Priors & Burn In & Thinning \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+    Informed & 20,000 & 15\\
+    Uninformed & 20,000 & 25\\ 
+    \noalign{\smallskip}\hline
+  \end{tabular}
+\end{center}
+\label{tab_p7}
+\end{table}
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{cc}
+\includegraphics[height=2.0in]{./Figures/Prob7/Informed/mu_low} &
+\includegraphics[height=2.0in]{./Figures/Prob7/Informed/mu_nor} \\
+$\mu_1$ & $\mu_2$ \\
+\includegraphics[height=2.0in]{./Figures/Prob7/Informed/tau_low} &
+\includegraphics[height=2.0in]{./Figures/Prob7/Informed/tau_low} \\
+$\tau_1$ & $\tau_2$ \\
+\end{tabular}
+\end{center}
+\caption{Posteriors with Informed Priors}
+\label{tab:p7_I}
+\end{table}
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{cc}
+\includegraphics[height=2.0in]{./Figures/Prob7/Uninformed/mu_low} &
+\includegraphics[height=2.0in]{./Figures/Prob7/Uninformed/mu_nor} \\
+$\mu_1$ & $\mu_2$ \\
+\includegraphics[height=2.0in]{./Figures/Prob7/Uninformed/tau_low} &
+\includegraphics[height=2.0in]{./Figures/Prob7/Uninformed/tau_low} \\
+$\tau_1$ & $\tau_2$ \\
+\end{tabular}
+\end{center}
+\caption{Posteriors with Uninformed Priors}
+\label{tab:p7_U}
+\end{table}
+
+The most notable difference was that choosing informed priors lead to less diffuse posteriors with lower autocorrelation.
 
 Compute the probability that the difference of the means is greater than zero.
 Compute the posterior probability that the ratio of the standard deviations is greater than 1.
