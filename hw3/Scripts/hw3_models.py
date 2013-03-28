@@ -11,7 +11,7 @@ def prob_3():
 
     # Covariates:
     #   max gr temp, min gr temp, ave gr temp index, max air temp, min air temp, ave air temp index 
-    beta = pymc.MvNormalCov('beta', mu = np.zeros(7), C = 100*np.identity(7))  
+    beta = pymc.Normal('beta', mu = [0,0,0,0,0,0,0], tau=[10**-6,10**-6,10**-6,10**-6,10**-6,10**-6,10**-6] , value=[0,0,0,0,0,0,0])  
 
     @deterministic
     def y_mean(beta=beta, data=data_x):
@@ -21,6 +21,9 @@ def prob_3():
     evap_sim = pymc.Normal('evap_sim', mu=y_mean, tau=sigma**-2)
 
     return vars()
+
+
+
 
 def prob_3_red1():
 

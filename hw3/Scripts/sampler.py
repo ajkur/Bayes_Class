@@ -7,14 +7,16 @@ vars = hw3_models.prob_3()
 
 m = mc.MCMC(vars)
 m.use_step_method(mc.AdaptiveMetropolis, [m.beta])
-m.sample(iter=150000, burn=50000, thin=200)
+m.sample(iter=20000, burn=10000, thin=50)
 # m.sample(iter=1500, burn=5, thin=1)
 
 print m.beta.summary()
+print m.sigma.summary()
 # print m.evap_sim.stats()
 print 'DIC=%f' % m.dic
 mc.Matplot.plot(m, format='pdf', path='../Figures', common_scale=False)
 
+print m.y_mean.trace[1000]
 
 # Chi squared 
 # T_sim = 0.0
