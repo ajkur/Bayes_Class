@@ -1,0 +1,75 @@
+Part B)
+
+	Mean             SD               MC Error        95% HPD interval
+	------------------------------------------------------------------
+B0	-1.19            9.591            0.352          [-19.717  17.14 ]
+B1	2.023            1.111            0.044            [-0.18   4.022]
+B2	-2.609           1.381            0.062            [-5.181  0.181]
+B3	0.132            0.339            0.013            [-0.536  0.779]
+B4	-0.462           1.009            0.041            [-2.335  1.664]
+B5	-0.018           1.023            0.046            [-1.89   2.088]
+B6	0.352            0.238            0.009            [-0.084  0.828]
+
+By examining the posteriors of the regression coefficients, we can see that several 
+are centered around zero. Looking at the 95% intervals, the coefficients that are least 
+likely to be zero are the maximum and minimum ground temperature (B1 and B2). The average
+air temperature index also appears to be less likely to be zero. This will be considered
+in the next section.
+
+
+Part C)
+
+I considered five models:
+
+Full Model: DIC = 176
+Min and Max Ground Only: DIC = 180
+Min and Max Air Only: DIC = 198
+Min and Max Ground plus Air Index: DIC = 169
+Min and Max Ground plus Ground Index: DIC = 170
+
+Based on these results, using the Min and Max ground temperature plus one of the indicies
+appears to be the best option. This supports the observations made in the previous section.
+
+
+Part D)
+
+Do determine if there were any outliers, I examined the quantiles of the poster predictive 
+distribution. 
+
+0.5%  =  9.62
+99.5% = 53.05
+
+This shows that three of the data points (4, 5, and 54) could possibly be outliers.
+
+
+Part E)
+
+Intuition says that higher temperatures leads to more evaporation. There are two regression
+coefficients, so we need two means and variances. Let's assume the following was gathered 
+from an expert:
+
+1 - Temperature: 75, 50% certain evaporation is between 0 and 10, with a mean of 5
+2 - Temperature: 90, 50% certain evaporation is between 30 and 60, with a mean of 45
+
+This yields the following prior:
+
+N ~ |  5   55.0    0.0 |
+    | 45 ,  0.0  495.0 |
+
+Informed Priors Output:
+
+	Mean             SD               MC Error        95% HPD interval
+	------------------------------------------------------------------
+	0.795            7.497            0.241          [-13.492  15.068]
+	0.355            0.092            0.003            [ 0.167  0.537]
+
+Uninformed Priors Output:
+
+	Mean             SD               MC Error        95% HPD interval
+	------------------------------------------------------------------
+	-8.124           10.187           0.301          [-27.153  11.196]
+	0.454            0.12             0.004            [ 0.214  0.662]
+
+The most noticable difference between informed and uninformed priors is the change in the
+posterior mean of the intercept and the tightening of the confidance intervals, which is to
+be expected from applying prior information.
