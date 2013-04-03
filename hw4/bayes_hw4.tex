@@ -155,13 +155,52 @@
 
 \begin{homeworkProblem}
 
-Low weight birth risk factors binary regression.
+Low birth weight risk factors using binary regression.
 
-Part A: discuss choice of priors for regression coeffs. Disperse normal is just fine.
+\subsection{Part A}
+Without any prior knowledge of the problem, I chose to use disperse normal priors ($\mu = 0$ and $\tau = 10^{-6}$) for the regression coefficients.
 
-Part B: Find a model with good fit. Mod 1: 235.286, Mod 2: 233.138, Mod 3: 232.636, Mod 4: 232.673, Mod 5: 233.322
+\subsection{Part B}
+Table~\ref{tab:mods_1} lists the regression parameters and DICs for five different models.
 
-Part C: Using best model, assess which covariates are significant and explain what criterion you used.
+\begin{table}[h!]
+\caption{Problem 1 model variants}
+\begin{center}
+  \begin{tabular}{cccccc}
+    \hline\noalign{\smallskip}
+    Model Number & Age & Weight & Race & Visits & DIC \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+    1 & X & X & X & X & 235.73 \\
+    2 & X & X & X & & 233.59 \\
+    3 & & X & X & & 231.91 \\
+    4 & & X & & & 232.80 \\
+    5 & X & X & & & 233.04 \\
+    \noalign{\smallskip}\hline
+  \end{tabular}
+\end{center}
+\label{tab:mods_1}
+\end{table}
+
+\subsection{Part C}
+Based on the DIC of model 3 compared to the other models, it appears that weight and race are the most significant covariates. We can justify the exclusion of age and number of visits by examining the 95\% confidence intervals of all four variables in model 1. In Table~\ref{tab:conf}, we can see that the parameters most likely to be zero are age and number of visits.
+
+\begin{table}[h!]
+\caption{Model 1 confidence intervals}
+\begin{center}
+  \begin{tabular}{ccc}
+    \hline\noalign{\smallskip}
+    Variable & 2.5 & 97.5 \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+    Intercept & -1.266 & 3.393 \\
+    Age & -0.091 & 0.043 \\
+    Weight & -0.024 & 0. \\
+    Race & -0.106 & 0.55 \\
+    Visits & -0.352 & 0.278 \\
+    \noalign{\smallskip}\hline
+  \end{tabular}
+\end{center}
+\label{tab:conf}
+\end{table}
 
 % \begin{figure}[ht]
 % \begin{center}
@@ -179,11 +218,11 @@ Part C: Using best model, assess which covariates are significant and explain wh
 
 Hierarchical models: impact on beta-blockers on mortality.
 
-Part A: Fit the model.
+Part A: Fit the model. Pretty much done, put in some plots. Talk about uniform (13.80) vs beta (13.198) prior for tau sq. Actually, tau sq should be either DuMouchel, shrinkage or flat. Need to figure this out in pymc.
 
-Part B: effectiveness of the beta-blockers? heterogeneity between studies? Provide evidence.
+Part B: effectiveness of the beta-blockers? heterogeneity between studies? Provide evidence. Overall effective, however very heterogeneous. Use $y_j$ estimates and difficulty of tuning tau as evidence.
 
-Part C: Compare raw estimates of log odds ratios to posterior means and comment.
+Part C: Compare raw estimates of log odds ratios to posterior means and comment. Posterior means all positive, however some raw estimates were negative, meaning the control group faired better than the beta blocker group.
 
 Part D: Replace first level with Binomial distributions, fit and comment.
 
@@ -195,7 +234,48 @@ Part E: Suggest what additional info could be incorporated to reduce heterogenei
 
 \begin{homeworkProblem}
 
-Derive uniform shrinkage prior.
+We know that the posterior hyperparameters of the Beta-Binomial Model are
+
+\begin{equation}
+\hat{\alpha} = \delta m_i + \bar{y},\quad \hat{\beta} = \delta(1-m_i) + n - \bar{y}
+\label{post_hyp}
+\end{equation}
+
+\noindent and the expected value of the posterior distribution is
+
+\begin{equation}
+E[\theta_i | \delta,m,y] = \frac{\hat{\alpha}}{\hat{\alpha} + \hat{\beta}}
+\label{post_exp_1}
+\end{equation}
+
+This simplifies to
+
+\begin{equation}
+E[\theta_i | \delta,m,y] = \frac{\delta m_i + \bar{y}}{\delta + n}
+\label{post_exp_2}
+\end{equation}
+
+The shrinkage factor on $\delta$ is
+
+\begin{equation}
+\frac{\delta}{\delta + n}
+\label{sfac}
+\end{equation}
+
+Putting a uniform (0,1) prior on this results in
+
+\begin{equation}
+p\left(\frac{\delta}{\delta + n}\right) = 1
+\label{sfac_prob}
+\end{equation}
+
+Transformation magics
+
+\begin{equation}
+p(\delta) = \frac{n}{(n+\delta)^2}
+\label{delt_prob}
+\end{equation}
+
 
 \end{homeworkProblem}
 
@@ -203,7 +283,7 @@ Derive uniform shrinkage prior.
 
 \begin{homeworkProblem}
 
-Derive Gibbs sampling algorithm.
+Derive Gibbs sampling algorithm. See attached.
 
 \end{homeworkProblem}
 
