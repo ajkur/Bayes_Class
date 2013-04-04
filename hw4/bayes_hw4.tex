@@ -202,14 +202,6 @@ Based on the DIC of model 3 compared to the other models, it appears that weight
 \label{tab:conf}
 \end{table}
 
-% \begin{figure}[ht]
-% \begin{center}
-% \includegraphics[height=2.75in]{./Figures/Prob2/sigma}
-% \end{center}
-% \caption{Posterior summary for $\sigma$ using PyMC}
-% \label{fig:p2_sigma}
-% \end{figure}
-
 \end{homeworkProblem}
 
 
@@ -218,15 +210,38 @@ Based on the DIC of model 3 compared to the other models, it appears that weight
 
 Hierarchical models: impact on beta-blockers on mortality.
 
-Part A: Fit the model. Pretty much done, put in some plots. Talk about uniform (13.80) vs beta (13.198) prior for tau sq. Actually, tau sq should be either DuMouchel, shrinkage or flat. Need to figure this out in pymc.
+\subsection{Part A} 
+Fit the model. See $\tau^2$ output in Figure~\ref{fig:tau_2a}.
 
-Part B: effectiveness of the beta-blockers? heterogeneity between studies? Provide evidence. Overall effective, however very heterogeneous. Use $y_j$ estimates and difficulty of tuning tau as evidence.
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[height=3.0in]{./Figures/Report/tau_sq_2a.pdf}
+\end{center}
+\caption{Trace, autocorrelation, and histogram of $\tau^2$ for fitted model}
+\label{fig:tau_2a}
+\end{figure}
 
-Part C: Compare raw estimates of log odds ratios to posterior means and comment. Posterior means all positive, however some raw estimates were negative, meaning the control group faired better than the beta blocker group.
+Model:
+\code{./Code/2a.py}
 
-Part D: Replace first level with Binomial distributions, fit and comment.
+\subsection{Part B}
 
-Part E: Suggest what additional info could be incorporated to reduce heterogeneity.
+We can judge the effectiveness of beta-blockers by examining the predicted values of the overall log odds ratio,$\theta$, and the between model variance, $\tau^2$. The posterior mean of $\theta$ is positive (around 0.25) indicating that the odds of surviving a heart attack when given beta blockers is greater than the survival odds of the control group. However, there is a lot of heterogeneity between studies as evidnet by the raw log odds ratios, $y_j$, and noticing that six of the studies have negative values indicating better survival in the control group. Additionally, the predicted mean of $\tau$ is 0.195 which is on the same order as $\theta$ indicating high variability between studies.  
+
+\subsection{Part C}
+
+The posterior means of $\theta_j$ were all positive and clustered closer to the overall mean ($\theta$), while the raw estimates were occasionally negitive and had larger variation.
+
+\subsection{Part D}
+
+Incomplete.  \\
+
+Model:
+\code{./Code/2d.py}
+
+\subsection{Part E}
+
+Currently, the model treats every patient in the study the same. To reduce heterogeneity, patients could be binned by age, weight, etc., to assess the effect of beta blockers in different subsets of the population.
 
 \end{homeworkProblem}
 
@@ -269,7 +284,26 @@ p\left(\frac{\delta}{\delta + n}\right) = 1
 \label{sfac_prob}
 \end{equation}
 
-Transformation magics
+Transformation of variables:
+
+\begin{equation}
+x = \frac{\delta}{\delta + n}
+\label{sfac_tran1}
+\end{equation}
+
+\begin{equation}
+p(\delta) = f\left(\frac{\delta}{\delta + n}\right) \frac{dx}{d\delta}
+\label{sfac_tran2}
+\end{equation}
+
+\noindent where
+
+\begin{equation}
+f\left(\frac{\delta}{\delta + n}\right) = 1
+\label{sfac_tran3}
+\end{equation}
+
+\noindent so that leaves
 
 \begin{equation}
 p(\delta) = \frac{n}{(n+\delta)^2}
@@ -283,7 +317,19 @@ p(\delta) = \frac{n}{(n+\delta)^2}
 
 \begin{homeworkProblem}
 
-Derive Gibbs sampling algorithm. See attached.
+Gibbs sampling algorithm for a normal-normal model.
+
+Step 1: Pick initial values for $\mu$ and $\tau^2$.
+
+Step 2: Sample $\mu_i$ from its full conditional.
+
+Step 3: Sample $\mu$ from its full conditional using the new value of $\mu_i$.
+
+Step 4: Sample $\tau^2$ from its full conditional using the new values of $\mu_i$ and $\mu$.
+
+Step 5: Repeat 2-4 using updated values of $\mu_i$, $\mu$, and $\tau^2$ at each step. \\
+ 
+In order to do this, we must assign priors to $\mu$ and $\tau^2$, derive the posterior probability $p(\mu_i,\mu,\tau^2|y,\sigma^2)$, and derive the full conditionals for $\mu_i$, $\mu$, and $\tau^2$. See the attached graph paper for details.
 
 \end{homeworkProblem}
 
