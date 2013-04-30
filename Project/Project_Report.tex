@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage{mathptm,times}
+\usepackage[pdftex]{graphicx}
+\usepackage[pdftex,
+        colorlinks=true,
+        urlcolor=linkblue,     % \href{...}{...} external (URL)
+        citecolor=linkred,     % citation number colors
+        linkcolor=linknavy,    % \ref{...} and \pageref{...}
+        pdftitle={Flame Spread},
+        pdfauthor={Andrew Kurzawski},
+        pdfsubject={Flame Spread},
+        pdfkeywords={UT},
+        pdfproducer={pdflatex},
+        pagebackref,
+        pdfpagemode=UseNone,
+        bookmarksopen=true,
+        plainpages=false]{hyperref}
+\usepackage{pdfsync}
+\usepackage{color}
+\usepackage{titling}
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography and index in the ToC
+
+\definecolor{linknavy}{rgb}{0,0,0.50196}
+\definecolor{linkred}{rgb}{1,0,0}
+\definecolor{linkblue}{rgb}{0,0,1}
+
+\setlength{\droptitle}{-4em}     % Eliminate the default vertical space on the title page.
+\addtolength{\droptitle}{5cm}   % Only a guess. Use this for adjustment of the title placement.
+
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{9.0in}
+\setlength{\topmargin}{0.in}
+\setlength{\headheight}{0.in}
+\setlength{\headsep}{0.in}
+\setlength{\parindent}{0.25in}
+\setlength{\oddsidemargin}{0.0in}
+\setlength{\evensidemargin}{0.0in}
+
+\begin{document}
+
+\pagestyle{plain}
+
+% Project Proposal: Model Calibration and Uncertainty Quantification Using Bayesian Methods
+
+\section{Introduction and Background}
+
+Modeling physical systems requires that we prescribe values for the model parameters based on previous knowledge, correlations, engineering estimations, etc. If we possess expermental data for the system of interest, we can numerically invert for the unknown model parameters. In higher order systems, the solution space may be complicated, and inversion methods can easily get stuck in local minima and maxima. Bayesian inference offers a way to calibrate models of physical systems and calculate the uncertainty in model parameters by using an MCMC sampler.
+
+Talk about grass fire: prediction problem, resource allocation problem, make analogy to huricane forecasting bands with 95 percent confidence interval.
+
+Describe experiment, field size, data loggers, measured quantities.
+
+Describe modeling possibilities and end with decision to use rothermal (just expand upon the email for most of this.) Like a bayesian regression where regression parameters have physical meaning, can be easily checked for non-physical predictions.
+
+
+\section{Flame Spread Model Overview}
+
+Lay out the equations as succinctly as possible.
+
+
+\section{Bayesian Model}
+
+Describe data, spread, moisture etc.
+
+Describe unknown parameters. describe priors (uniform for first cut, if time allows consider estimate betas or normals from literature(expert opinions))
+
+Paste in some code maybe.
+
+
+\section{Results and Analysis}
+
+Describe tuning process. Aim for good mixing and low autocorrelation.
+
+Posterior output. Did it fit? Are the values physically significant? What is the uncertainty? What is the physical interpretation of this uncertainty (ie do a simple calculation to see the time frame in which fire could spread over a whole field to give a sense of scale)?
+
+Conclude with possibility of extension to more complicated forecasting models for resource allocation.
+
+
+% \bibliographystyle{unsrt}
+% \bibliography{../../Bibliography/UTFRG_general}
+
+\end{document}
