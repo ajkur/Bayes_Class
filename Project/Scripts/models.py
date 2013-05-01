@@ -9,7 +9,8 @@ def uniform_priors():
     # modSig, hoc, igFac
     modSig = mc.Uniform('modSig', lower=500., upper=50000., value=2000.)
     hoc = mc.Uniform('hoc', lower=1., upper=50000., value=6000.)
-    mExt = mc.Beta('mExt', alpha=2., beta=5., value=0.2)
+    # mExt = mc.Beta('mExt', alpha=2., beta=5., value=0.2)
+    mExt = mc.Uniform('mExt', lower=0., upper=1., value=0.3)
 
     sigma = mc.Uniform('sigma', lower=0., upper=100., value=1.)
 
