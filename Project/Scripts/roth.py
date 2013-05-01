@@ -2,7 +2,8 @@ from __future__ import division
 import numpy as np
 import math as m
 
-def flameSpread(sigma, beta, moist, hoc, igFac, vel, height, mExt=0.3):
+def flameSpread(sigma, beta, hoc, igFac, moist, vel=393.7, height=5, mExt=0.3):
+    # beta = 
     # Calculate functions of sigma and beta
     A = 1 / (4.774*sigma**(0.1) - 7.27)
     B = 0.02526 * sigma**(0.54)
@@ -29,9 +30,10 @@ def flameSpread(sigma, beta, moist, hoc, igFac, vel, height, mExt=0.3):
 
     # Spread rate
     spRate = (1 + phiW) * EP * GAM * minCoef * hoc * height * etaMoist / (ep * Qig)
-    return spRate
+
+    # Convert to m/s
+    return spRate*0.00508
 
 # Mixture of forest service guide and reasonable data for wind speed and grass height
-fpm = flameSpread(sigma=2054, beta=0.00143, moist=0.15, hoc=8000, igFac=250, vel=880, height=3)
-mps = fpm*0.00508
-print mps
+# mps = flameSpread(sigma=2054, beta=0.00143, hoc=8000, igFac=250, moist=0.15, vel=880, height=3)
+# print mps
