@@ -9,14 +9,14 @@ def uniform_priors():
     # modSig, hoc, igFac
     modSig = mc.Uniform('modSig', lower=500., upper=50000., value=2000.)
     hoc = mc.Uniform('hoc', lower=1., upper=50000., value=6000.)
-    # igFac = mc.Uniform('igFac', lower=1., upper=1000., value=200.)
+    mExt = mc.Beta('mExt', alpha=2., beta=5., value=0.2)
 
     sigma = mc.Uniform('sigma', lower=0., upper=100., value=1.)
 
     # Model
     @mc.deterministic
-    def y_mean(modSig=modSig, hoc=hoc, igFac=250., D_one=data.metricBulk, D_two=data.mcs):
-        return roth.flameSpread(sigma=modSig, bulk=D_one, hoc=hoc, igFac=igFac, moist=D_two)
+    def y_mean(modSig=modSig, hoc=hoc, igFac=250., D_one=data.metricBulk, D_two=data.mcs, moistE=mExt):
+        return roth.flameSpread(sigma=modSig, bulk=D_one, hoc=hoc, igFac=igFac, moist=D_two, mExt=moistE)
 
     # Likelihood
     # The likelihood is N(y_mean, sigma^2), where sigma

@@ -9,7 +9,7 @@ import models
 # Generate model and fit model
 vars = models.uniform_priors()
 m1 = mc.MCMC(vars)
-m1.use_step_method(mc.AdaptiveMetropolis, [m1.modSig,m1.hoc])
+m1.use_step_method(mc.AdaptiveMetropolis, [m1.modSig,m1.hoc,m1.mExt])
 m1.sample(iter=50000, burn=25000, thin=50)
 print m1.summary()
 
