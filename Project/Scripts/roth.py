@@ -2,8 +2,11 @@ from __future__ import division
 import numpy as np
 import math as m
 
-def flameSpread(sigma, beta, hoc, igFac, moist, vel=393.7, height=5, mExt=0.3):
-    # beta = 
+def flameSpread(sigma, bulk, hoc, igFac, moist, vel=393.7, height=5, mExt=0.3):
+    # Calculate beta - packing ratio
+    drybulk = bulk/(height*0.3048) # kg/m^3
+    beta = drybulk/512.0
+
     # Calculate functions of sigma and beta
     A = 1 / (4.774*sigma**(0.1) - 7.27)
     B = 0.02526 * sigma**(0.54)
@@ -35,5 +38,5 @@ def flameSpread(sigma, beta, hoc, igFac, moist, vel=393.7, height=5, mExt=0.3):
     return spRate*0.00508
 
 # Mixture of forest service guide and reasonable data for wind speed and grass height
-# mps = flameSpread(sigma=2054, beta=0.00143, hoc=8000, igFac=250, moist=0.15, vel=880, height=3)
+# mps = flameSpread(sigma=2054, bulk=1.2, hoc=8000, igFac=250, moist=0.15, vel=880, height=3)
 # print mps
