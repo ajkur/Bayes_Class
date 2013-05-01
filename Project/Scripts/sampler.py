@@ -15,3 +15,5 @@ print m1.summary()
 
 # Plot resulting distributions and convergence diagnostics
 mc.Matplot.plot(m1, format='pdf', path='../Figures/diffuse', common_scale=False)
+
+# plot sp vs mc here
