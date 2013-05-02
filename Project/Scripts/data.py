@@ -8,3 +8,4 @@ mcs = mcsper/100.0
 
 metricBulk = np.array([1.087, 1.169, 1.318, 1.174, 1.279, 1.429, 1.358, 1.339, 1.322, 0.939, 0.973]) # kg/m^2
 
+meanBulk = np.mean(metricBulk)

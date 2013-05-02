@@ -17,8 +17,8 @@ def uniform_priors():
 
     # Model - switch mc and hoc
     @mc.deterministic
-    def y_mean(modSig=modSig, hoc=hoc, igFac=250., D_one=data.metricBulk, moistC=data.mcs, moistE=mExt):
-        return roth.flameSpread(sigma=modSig, bulk=D_one, hoc=hoc, igFac=igFac, moist=moistC, mExt=moistE)
+    def y_mean(modSig=modSig, mBulk=data.meanBulk, hoc=hoc, moistC=data.mcs, moistE=mExt):
+        return roth.flameSpread(sigma=modSig, bulk=mBulk, hoc=hoc, moist=moistC, mExt=moistE)
 
     # Likelihood
     # The likelihood is N(y_mean, sigma^2), where sigma

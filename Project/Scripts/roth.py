@@ -1,7 +1,7 @@
 from __future__ import division
 import numpy as np
 
-def flameSpread(sigma, bulk, hoc, igFac, moist, vel=393.7, height=5, mExt=0.3):
+def flameSpread(sigma=2054., bulk=1.217, hoc=8000., moist=0.15, igFac=250, vel=393.7, height=5, mExt=0.3):
     # Calculate beta - packing ratio
     drybulk = bulk/(height*0.3048) # kg/m^3
     beta = drybulk/512.0
@@ -37,5 +37,5 @@ def flameSpread(sigma, bulk, hoc, igFac, moist, vel=393.7, height=5, mExt=0.3):
     return spRate*0.00508
 
 # Mixture of forest service guide and reasonable data for wind speed and grass height
-# mps = flameSpread(sigma=2054, bulk=1.2, hoc=8000, igFac=250, moist=0.15, vel=880, height=3)
+# mps = flameSpread(sigma=2054, bulk=1.2, hoc=8000, igFac=250, moist=0.15, vel=393.7, height=5
 # print mps
