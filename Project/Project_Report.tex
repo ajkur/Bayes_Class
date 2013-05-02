@@ -66,7 +66,7 @@
   \vspace{2em}
 }
 
-\title{Quantifying Flame Spread Uncertainty Using Bayesian Methods}
+\title{Quantifying Flame Spread Rate Uncertainty Using Bayesian Methods}
 \author{
         \\
         Andrew Kurzawski \\
@@ -92,7 +92,7 @@ Bayesian inference offers a means to fit models of physical systems to observed 
 
 Prediction of fire spread is a major concern to wildland fire fighters who use this information construct tactical plans for supressing and controlling fires. This involves the allocation of resources (personal, command stations, airtankers, etc.) at the appropriate time and location in situations where a poor prediction could cause property damage and put fire figheres and residents lives at risk.
 
-Research efforts in wildland fire modeling have produced models for fire behaviour that range in complexity from algebraic equations to full fluid dynamics and combustion models. This project will focus on the Rothermal flame spread model (ref) that was derived from a combination of fire experiment correlations and physical principles. The result is a set of algebraic equations with eleven input parameters that can be computed quickly. Useing this model with Bayesian methods is equivocal to conducting a Bayesian regression where the regression parameters each have a physical meaning, and can therefore be easily examined for non-physical predictions.
+Research efforts in wildland fire modeling have produced models for fire behaviour that range in complexity from algebraic equations to full fluid dynamics and combustion models. This project will focus on the Rothermal flame spread model (ref) that was derived from a combination of fire experiment correlations and physical principles. The result is a set of algebraic equations with eleven input parameters that can be computed quickly. The tradional approach to using the Rothermal model is calculating the flame spread rate using prescribed input parameters based on the fuel type, wind speed, and ground slope. Using this model with Bayesian methods is equivocal to conducting a Bayesian regression where the regression parameters each have a physical meaning, and can therefore be easily examined for non-physical predictions.
 
 The scenario used for this study involves a large scale (~30 acres) field burn conducted in conjunction with the Texas Forest Service in the Spring of 2011 before Texas saw one of the worst fire seasons on record. The field was composed mostly of Little Bluestem grass with pockets of other vegetation interspersed throughout. We instrumented the field with twenty data loggers to track flame spread and temperature. Flame spread rate in the downwind direction was calculated by the time it took the flame to travel from one data logger to the next divided by the distance. Additionally, data was collected on the moisture content of the grass and weather conditions such as ambient temperature, wind speed and direction, and relative humidity. Some of these values correspond to Rothermal model inputs and will be used as scenario parameters when estimating the likelihood of the observed flame spread rates.
 
