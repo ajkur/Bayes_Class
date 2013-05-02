@@ -28,21 +28,19 @@ pl.figure(figsize=(12,9))
 graphics.plot_data()
 pl.savefig('../Figures/data_rates.pdf')
 
-# MC = arange(0.05, 0.5, .01)
-# y_trace = []
-# sigList = []
-# hocList = []
-# mExtList = []
-# for modSig in m1.modSig.trace():
-#     sigList.append(modSig)
-# for hoc in m1.hoc.trace():
-#     hocList.append(hoc)
-# for mExt in m1.mExt.trace():
-#     mExtList.append(mExt)
+# # Generate model and fit model
+# vars = models.no_moist_data()
+# m2 = mc.MCMC(vars)
+# # m2.use_step_method(mc.AdaptiveMetropolis, [m2.modSig,m2.hoc,m2.mExt])
+# m2.sample(iter=50000, burn=25000, thin=50)
+# # m2.sample(iter=300, burn=50, thin=2) # Test run
+# print m2.summary()
 
-# for i in range(len(sigList)):
-#     y = roth.flameSpread(sigma=sigList[i], bulk=data.meanBulk, hoc=hocList[i], moist=MC, mExt=mExtList[i])
-#     pl.plot(R, y, color='gray', alpha=.75, zorder=-1)
-#     y_trace.append(y)
+# # Plot resulting distributions and convergence diagnostics
+# mc.Matplot.plot(m2, format='pdf', path='../Figures/no_moist', common_scale=False)
 
-# print y_trace
+# # plot sp vs mc here
+# pl.figure(figsize=(12,9))
+# graphics.plot_spread_mc_nomext(m2)
+# pl.savefig('../Figures/spread_rate_nm.pdf')
+

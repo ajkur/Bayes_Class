@@ -94,17 +94,58 @@ Prediction of fire spread is a major concern to wildland fire fighters who use t
 
 Research efforts in wildland fire modeling have produced models for fire behaviour that range in complexity from algebraic equations to full fluid dynamics and combustion models. This project will focus on the Rothermal flame spread model (ref) that was derived from a combination of fire experiment correlations and physical principles. The result is a set of algebraic equations with eleven input parameters that can be computed quickly. The tradional approach to using the Rothermal model is calculating the flame spread rate using prescribed input parameters based on the fuel type, wind speed, and ground slope. Using this model with Bayesian methods is equivocal to conducting a Bayesian regression where the regression parameters each have a physical meaning, and can therefore be easily examined for non-physical predictions.
 
-The scenario used for this study involves a large scale (~30 acres) field burn conducted in conjunction with the Texas Forest Service in the Spring of 2011 before Texas saw one of the worst fire seasons on record. The field was composed mostly of Little Bluestem grass with pockets of other vegetation interspersed throughout. We instrumented the field with twenty data loggers to track flame spread and temperature. Flame spread rate in the downwind direction was calculated by the time it took the flame to travel from one data logger to the next divided by the distance. Additionally, data was collected on the moisture content of the grass and weather conditions such as ambient temperature, wind speed and direction, and relative humidity. Some of these values correspond to Rothermal model inputs and will be used as scenario parameters when estimating the likelihood of the observed flame spread rates.
+The scenario used for this study involves a large scale (~30 acres) field burn conducted at Camp Swift near Bastrop in the Spring of 2011 before Texas saw one of the worst fire seasons on record. The field was composed mostly of Little Bluestem grass with pockets of other vegetation interspersed throughout. We instrumented the field with twenty data loggers to track flame spread and temperature. Flame spread rate in the downwind direction was calculated by the time it took the flame to travel from one data logger to the next divided by the distance. Additionally, data was collected on the moisture content of the grass and weather conditions such as ambient temperature, wind speed and direction, and relative humidity. Some of these values correspond to Rothermal model inputs and will be used as scenario parameters when estimating the likelihood of the observed flame spread rates.
 
 
 \section{Flame Spread Model Overview}
 
-Lay out the equations as succinctly as possible. Cite Rothermal. 11 parameters, system of algebriac equations.
+The Rothermal Model is a system of equations with eleven input parameters that can be used to calculate flame spread rate. Some of these parameters can be measured in the field and others are often prescribed fixed values based on the fuel type (i.e. trees, brush, grass). See Appendix A for descriptions of the input parameters. The full equation for rate of spread, $R$, is as follows:
+
+\begin{equation}
+R = \frac{I_R\xi(1+\phi_W+\phi_S)}{\rho_b\epsilon Q_{ig}}
+\label{eq:roth_main}
+\end{equation}
+
+Each variable in Equation~\ref{eq:roth_main} is a function of one or more other variables that may or may not be input parameters. To make this model more useable, we will simplify the equation in terms of the input parameters. The variables $\xi$, $\rho_b$, and $\epsilon$ are all constructs with limited physical meaning that are each a function of the fuel load ($w_O$), fuel depth ($\delta$), fuel density ($\rho_p$), and surface area to volume ratio ($\sigma$). 
+
+\begin{equation}
+\frac{\xi}{\rho_b\epsilon} = \hat{F}(w_O, \delta, \rho_p, \sigma)
+\label{eq:roth_fun}
+\end{equation}
+
+\noindent where $\hat{F}$ is a combination of polynomial functions of the input parameters which reduces Equation~\ref{eq:roth_main} down to
+
+\begin{equation}
+R = \hat{F}(w_O, \delta, \rho_p, \sigma) I_R\frac{1+\phi_W+\phi_S}{Q_{ig}}
+\label{eq:roth_fun2}
+\end{equation}
+
+$I_R$ is another non-physical construct that, in addition to being a function of $w_O$, $\delta$, $\rho_p$, and $\sigma$, is a function of five other physical parameters: the total and effective mineral contents ($S_T$ and $S_e$), the moisture content of the fuel ($M$) and the moisture content of extinction ($M_{ext}$), and the heat of combustion $h$. Of these, $S_T$ and $S_e$ will be held constant for this analysis.
+
+Of the remaining parameters, the wind factor ($\phi_W$) is a function of wind speed ($U$), $w_O$, $\delta$, $\rho_p$, and $\sigma$. The slope factor ($\phi_S$) will be neglected for this analysis as the field in question was relatively flat. The final parameter ($Q_{ig}$) is only a function the moisture content. The result is a reduced Rothermal mode that depends on eight input parameters.
+
+\begin{equation}
+R = F(w_O, \delta, \rho_p, \sigma, M, M_{ext}, h, U)
+\label{eq:roth_fun3}
+\end{equation}
+
+The following Bayesian modeling and analysis will seek to find the true distributions of as many of these parameters as possible using scenario data from the large scale field burn.
+
+\section{Bayesian Model Formulation}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=3.0in]{./Figures/field}
+\end{center}
+\caption{Schematic of experimental field. The green dots are data loggers, and the red X represents a broken divice.}
+\label{fig:field} 
+\end{figure}
+
+Several models will be constructed to estimate the flame spread rate, but first we take an inventory of the available data. If we consider flame spread in the downwind direction and take only point-to-point observations of the travel time, then the twenty data loggers embeded in a grid on the grass field produce sixteen unique spread rates. Four measurements came from a boundary that could have been affected by nearby trees and will be discarded to focus on grass flame spread. Of the remaining data loggers, one malfunctioned and will also be discarded (Figure~\ref{fig:field}. The result is eleven flame spread rate observations.
 
 
-\section{Bayesian Model}
 
-Describe data, spread, moisture etc.
+Describe data, spread, moisture (mention estimated data, and that in reality you should account for the uncertainty in these estimates) etc.
 
 Describe unknown parameters. describe priors (uniform for first cut, if time allows consider estimate betas or normals from literature(expert opinions))
 
@@ -127,6 +168,8 @@ Conclude with possibility of extension to more complicated forecasting models fo
 
 \clearpage
 \appendix
+\section{Appendix: Rothermal Input Parameters}
+
 \section{Appendix: PyMC Model Code}
 
 % \bibliographystyle{unsrt}
