@@ -185,24 +185,20 @@ h &\sim& \mathcal{U}(1,50000)
 \label{eq:mod2_priors}
 \end{align}
 
-Following the same methodology used for $M_{ext}$, we will construct a prior for $\sigma$ illiciting data from previous measurements that have not been published. The mean is estimated to be 2300 $ft^{-1}$ with a 99\% probability that $\sigma$ is less than 3700 $ft^{-1}$. Once again using a Gamma prior, the values for $\alpha$ and $\beta$ are 18.4 and 124 respectively. The priors for Model 3 are 
+Following a similar methodology used for $M_{ext}$, we will construct a prior for $\sigma$ illiciting data from previous measurements that have not been published. The mean is estimated to be 2300 $ft^{-1}$ with a 99\% probability that $\sigma$ is less than 3700 $ft^{-1}$, and we will choose a Gamma prior. However, at some point when $\sigma$ is less than 100 the model becomes unstable producing non-physical spread rates. To circumvent this issue, we will shift the illicited values down by 100 to create a prior and shift the samples up when evaluating the model effectively sampling from a Gamma distribution beginning at 100. Solving for the parameters of the Gamma distribution in the same manner as described previously, $\alpha$ and $\beta$ are 17.4 and 0.0079 respectively. The priors for Model 3 are as follows. 
 
 \begin{align}
 \begin{array}{ccc}
 M_{ext} &\sim& \Gamma(5.6,20.87) \\
-\sigma &\sim& \Gamma(18.4,124) \\
+\sigma &\sim& \Gamma(17.4,0.0079) \\
 h &\sim& \mathcal{U}(1,50000)
 \end{array}
-\label{eq:mod2_priors}
+\label{eq:mod3_priors}
 \end{align}
 
-The final model will be constructed by choosing the best fitting model from the previous three and removing the estimated moisture content data.
+The final model will be constructed by choosing the best fitting model from the previous three using the deviance information criterion (DIC) and removing the estimated moisture content data points. Note that an informed prior was not considered for the heat of combustion ($h$) as only one value given for all models (cite USFS) and there are a variety measurement techniques that can give significantly different results for the same type of fuel. Without a consistent data source, we can not bring in prior knowledge to improve upon the prescribed uniform distribution. 
 
-Model 4 best of 1, 2, and 3 based on DIC without estimated moisture content points.
-
-Note: Heat of combustion not considered for informed prior as only one value given for all models and there are a variety measurement techniques that can give significantly different results for the same type of fuel.
-
-Model code will be provided with the report, but is not necessary to include.
+These models will be coded in Python using the PyMC module for Bayesian inferance and Markov chain sampling methods. All models will use the standard Metropolis-Hastings algorithm to draw samples. Additionally, model code will be provided with the report as an electronic attachment.
 
 
 \section{Results and Analysis}
@@ -214,15 +210,63 @@ Posterior output. Did it fit? Are the values physically significant? What is the
 
 Model 1: High uncertainty, possibility of flame spread in very damp grass (MC over .5) is unlikely, suggest need for prior knowledge on Mext leading to model two.
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=3.0in]{./Figures/mod_one/spread_rate}
+\end{center}
+\caption{Flame spread rate vs. moisture content for Model 1.}
+\label{fig:m1_rate} 
+\end{figure}
+
 Model 2:
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=3.0in]{./Figures/mod_two/spread_rate}
+\end{center}
+\caption{Flame spread rate vs. moisture content for Model 2.}
+\label{fig:m2_rate} 
+\end{figure}
 
 Model 3:
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=3.0in]{./Figures/mod_three/spread_rate}
+\end{center}
+\caption{Flame spread rate vs. moisture content for Model 3.}
+\label{fig:m3_rate} 
+\end{figure}
+
 DIC Table
+
+\begin{table}[h]
+\caption{DIC for Models 1-3. consider including some confidince intervals}
+\begin{center}
+  \begin{tabular}{cc}
+    \hline\noalign{\smallskip}
+    Model & DIC \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+    1 & 18.62 \\
+    2 & 14.33 \\ 
+    3 & 23.26 \\ 
+    \noalign{\smallskip}\hline
+  \end{tabular}
+\end{center}
+\label{tab:dic}
+\end{table}
 
 Now we choose Model X and remove the estimated moisture content scenario parameters. This model will be reffered to as Model 4.
 
 Model 4: uncertainty in spread and sav? DIC? Where the estimated point outliers in previous models?
+
+% \begin{figure}[h]
+% \begin{center}
+% \includegraphics[width=3.0in]{./Figures/mod_four/spread_rate}
+% \end{center}
+% \caption{Flame spread rate vs. moisture content for Model 4.}
+% \label{fig:m4_rate} 
+% \end{figure}
 
 What is the physical interpretation of this uncertainty? (ie maybe do a simple calculation to see the time frame in which fire could spread over a whole field to give a sense of scale, andor make analogy to huricane forecasting bands with 95 percent confidence interval) 
 
@@ -238,18 +282,23 @@ Conclude with possibility of extension to more complicated forecasting models.
 \label{ap:table}
 
 \begin{table}[h]
-\caption{PARAMETERS}
+\caption{Input parameters for basic Rothermal model with values included for fixed parameters.}
 \begin{center}
   \begin{tabular}{cccc}
     \hline\noalign{\smallskip}
     Parameter & Symbol & Value & Units \\
     \noalign{\smallskip}\hline\noalign{\smallskip}
-    Front (Flame) Side Temperature & $T_\infty$ & $K$\\
-    Flame Side Heat Transfer Coefficient & $h$ & $\frac{W}{m^2K}$\\ 
-    Material Specific Heat & $c$ & $\frac{J}{kgK}$\\ 
-    Material Conductivity & $k$ & $\frac{W}{mK}$\\ 
-    Back Side Gas Temperature & $T_{\infty,b}$ & $K$\\ 
-    Back Side Heat Transfer Coefficient & $h_b$ & $\frac{W}{m^2K}$\\ 
+    Dry Fuel Load & $w_O$ & 1.217 & $kg/m^2$ \\
+    Fuel Depth & $\delta$ & 5 & $ft$ \\ 
+    Surface Area to Volume Ratio & $\sigma$ & - & $1/ft$ \\ 
+    Heat of Combustion & $h$ & - & $Btu/lb$ \\ 
+    Dry Particle Density & $\rho_p$ & 512 & $kg/m^3$\\ 
+    Moisture Content & $M$ & - & mass moisture/mass dry fuel \\ 
+    Total Mineral Content & $S_T$ & 0.0555 & mass minerals/mass dry fuel \\
+    Effective Mineral Content & $S_e$ & 0.01 & mass silica-free minerals/mass dry fuel \\
+    Wind Velocity & $U$ & 2 & $m/s$ \\
+    Slope Angle & $\phi$ & 0 & $rad$ \\
+    Moisture Content of Extinction & $M_{ext}$ & - & mass moisture/mass dry fuel \\
     \noalign{\smallskip}\hline
   \end{tabular}
 \end{center}

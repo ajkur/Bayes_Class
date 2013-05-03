@@ -9,7 +9,7 @@ import models
 import roth
 import data
 
-modNum = 2
+modNum = 1
 
 if modNum == 1:
     # Generate model and fit model
@@ -19,7 +19,7 @@ if modNum == 1:
     m1.sample(iter=50000, burn=25000, thin=50)
     # m1.sample(iter=300, burn=50, thin=2) # Test run
     print m1.summary()
-    print m1.DIC()
+    print 'DIC=%f' % m1.dic
 
     # Plot resulting distributions and convergence diagnostics
     mc.Matplot.plot(m1, format='pdf', path='../Figures/mod_one', common_scale=False)
@@ -38,7 +38,7 @@ if modNum == 2:
     m2.sample(iter=50000, burn=25000, thin=50)
     # m2.sample(iter=300, burn=50, thin=2) # Test run
     print m2.summary()
-    print m2.DIC()
+    print 'DIC=%f' % m2.dic
 
     # Plot resulting distributions and convergence diagnostics
     mc.Matplot.plot(m2, format='pdf', path='../Figures/mod_two', common_scale=False)
@@ -47,6 +47,42 @@ if modNum == 2:
     pl.figure(figsize=(12,9))
     graphics.plot_spread_mc(m2)
     pl.savefig('../Figures/mod_two/spread_rate.pdf')
+
+if modNum == 3:
+    # Generate model and fit model
+    vars = models.model_three()
+    m3 = mc.MCMC(vars)
+    # m3.use_step_method(mc.AdaptiveMetropolis, [m3.modSig,m3.hoc,m3.mExt])
+    m3.sample(iter=50000, burn=25000, thin=50)
+    # m3.sample(iter=300, burn=50, thin=2) # Test run
+    print m3.summary()
+    print 'DIC=%f' % m3.dic
+
+    # Plot resulting distributions and convergence diagnostics
+    mc.Matplot.plot(m3, format='pdf', path='../Figures/mod_three', common_scale=False)
+
+    # plot sp vs mc here
+    pl.figure(figsize=(12,9))
+    graphics.plot_spread_mc_shift(m3)
+    pl.savefig('../Figures/mod_three/spread_rate.pdf')
+
+if modNum == 4:
+    # Generate model and fit model
+    vars = models.model_four()
+    m4 = mc.MCMC(vars)
+    # m4.use_step_method(mc.AdaptiveMetropolis, [m4.modSig,m4.hoc,m4.mExt])
+    m4.sample(iter=50000, burn=25000, thin=50)
+    # m4.sample(iter=300, burn=50, thin=2) # Test run
+    print m4.summary()
+    print 'DIC=%f' % m4.dic
+
+    # Plot resulting distributions and convergence diagnostics
+    mc.Matplot.plot(m4, format='pdf', path='../Figures/mod_four', common_scale=False)
+
+    # plot sp vs mc here
+    pl.figure(figsize=(12,9))
+    graphics.plot_spread_mc(m4)
+    pl.savefig('../Figures/mod_four/spread_rate.pdf')
 
 # Plot only scenario data and spread rates
 pl.figure(figsize=(12,9))

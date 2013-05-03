@@ -5,7 +5,7 @@ def flameSpread(sigma=2054., bulk=1.217, hoc=8000., moist=0.15, igFac=250, vel=3
     # Calculate beta - packing ratio
     drybulk = bulk/(height*0.3048) # kg/m^3
     beta = drybulk/512.0
-
+    
     # Calculate functions of sigma and beta
     A = 1 / (4.774*sigma**(0.1) - 7.27)
     B = 0.02526 * sigma**(0.54)
