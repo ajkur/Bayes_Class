@@ -185,7 +185,18 @@ h &\sim& \mathcal{U}(1,50000)
 \label{eq:mod2_priors}
 \end{align}
 
-Model 3 informed SAV and Mext
+Following the same methodology used for $M_{ext}$, we will construct a prior for $\sigma$ illiciting data from previous measurements that have not been published. The mean is estimated to be 2300 $ft^{-1}$ with a 99\% probability that $\sigma$ is less than 3700 $ft^{-1}$. Once again using a Gamma prior, the values for $\alpha$ and $\beta$ are 18.4 and 124 respectively. The priors for Model 3 are 
+
+\begin{align}
+\begin{array}{ccc}
+M_{ext} &\sim& \Gamma(5.6,20.87) \\
+\sigma &\sim& \Gamma(18.4,124) \\
+h &\sim& \mathcal{U}(1,50000)
+\end{array}
+\label{eq:mod2_priors}
+\end{align}
+
+The final model will be constructed by choosing the best fitting model from the previous three and removing the estimated moisture content data.
 
 Model 4 best of 1, 2, and 3 based on DIC without estimated moisture content points.
 
