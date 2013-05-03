@@ -143,9 +143,9 @@ The following Bayesian modeling and analysis will seek to find the true distribu
 
 Several models will be constructed to estimate the flame spread rate, but first we take an inventory of the available data. From each of the data loggers we have the time at which the flame reached the device. If we consider flame spread in the downwind direction and take only point-to-point observations of the travel time from one device to the next, then the twenty data loggers embeded in a grid on the grass field produce sixteen unique spread rates. Four measurements came from a boundary that could have been affected by nearby trees and will be discarded to focus on grass flame spread. Of the remaining data loggers, one malfunctioned and will also be discarded (Figure~\ref{fig:field}. The result is eleven flame spread rate observations that will be treated as independent assuming that the flame spread rate has reached a quasi-steady state by the time it arrives at the first row of data loggers.
 
-Accompanying each flame spread observation is a preburn moisture content measurement of the grass. However, three of these data points are missing so I elected to estimate them from the surrounding measurements. These will remain as point estimates for the purpose of this exercise, but it should be noted that a full model would include uncertainty information for the missing values. These values could also be discarded, and the effect of this will be examined briefly using the best fitting model.
+Accompanying each flame spread observation is a preburn moisture content ($M$) measurement of the grass. However, three of these data points are missing so I elected to estimate them from the surrounding measurements. These will remain as point estimates for the purpose of this exercise, but it should be noted that a full model would include uncertainty information for the missing values. These values could also be discarded, and the effect of this will be examined briefly using the best fitting model.
 
-The parameters $\sigma$, $M_{ext}$, and $h$ do not have any scenario data and will be given prior probability distribution functions. The remaining parameters in Equation~\ref{eq:roth_fun3} ($w_O$, $\delta$, $\rho_p$ and $U$) are irreducable and scenario specific. Unfortunately, these are only available on a field-wide level with limited uncertainty information. Similar to the missing moisture content scenario parameter, a full analysis would include uncertainty models for each of these parameters from field data however they will remain fixed in the following models (see Appendix~\ref{ap:table}).
+The parameters $\sigma$, $M_{ext}$, and $h$ do not have any scenario data and while recommended values are provided by the U.S. Forest Service (ref fuel models) there is no uncertainty information. Prior probability distribution functions will be chosen for each parameter based on the recommended values and compared to diffuse priors. The remaining parameters in Equation~\ref{eq:roth_fun3} ($w_O$, $\delta$, $\rho_p$ and $U$) are irreducable and scenario specific. Unfortunately, these are only available on a field-wide level with limited uncertainty information. Similar to the missing moisture content scenario parameter, a full analysis would include uncertainty models for each of these parameters from field data however they will remain fixed in the following models (see Appendix~\ref{ap:table}).
 
 Previous research was conducted with a higher order physics-based model focused on testing the sensitivity of flame spread rate to multiple input parameters (ref FireTech). The results of this study suggest that flame spread rate is most sensitive to $\sigma$ and $M$. Therefore, these parameters are the QoIs whose effect on the uncertainty of the flame spread rate is a desired output of the following analysis.
 
@@ -163,28 +163,56 @@ Y_i \sim \mathcal{N}(R_i,\tau^2),\quad i = 1,...,11
 \label{eq:tau_prior}
 \end{equation}
 
-Four models with different priors
+We will define four models with different sets of priors on $\sigma$, $M_{ext}$, and $h$. The first model represents the ``uninformed'' case, however we can not use truly uninformed priors because extreme values result in non-physical rates of spread. Likewise, combinations of extreme non-physical inputs can also produce a physical rate of spread. We must then limit each parameter to a wide physically realistic space. The most ``uninformed'' way to accomplish this is to choose wide uniform priors which is common practice for Bayesian modeling of physical thermal and fluid systems (cite turbulence and combustion papers). The priors for Model 1 are chosen as follows:
 
-Describe unknown parameters. describe priors (uniform for first cut, if time allows consider estimate betas or normals from literature(expert opinions))
+\begin{align}
+\begin{array}{ccc}
+\sigma &\sim& \mathcal{U}(500,50000) \\
+M_{ext} &\sim& \mathcal{U}(0,1) \\
+h &\sim& \mathcal{U}(1,50000)
+\end{array}
+\label{eq:mod1_priors}
+\end{align}
 
-End with a list of models: all uniform, beta mext, all betas from literature, best of previous three without estimated mcs.
+The motivation choosing the following models will be discussed in Section~\ref{sec:res}, and for now we will simply describe their developement. 
 
-Paste in some code maybe. ref appendix
+Model 2 informed Mext
+
+Model 3 informed SAV and Mext
+
+Model 4 best of 1, 2, and 3 based on DIC without estimated moisture content points.
+
+Note: Heat of combustion not considered for informed prior as only one value given for all models and there are a variety measurement techniques that can give significantly different results for the same type of fuel.
+
+Model code will be provided with the report, but is not necessary to include.
 
 
 \section{Results and Analysis}
+\label{sec:res}
 
-Describe tuning process. Aim for good mixing and low autocorrelation.
+Describe tuning process. Aim for good mixing and low autocorrelation. Choose iterations such that each produces the same number of samples.
 
 Posterior output. Did it fit? Are the values physically significant? What is the uncertainty? What about outliers (check estimated mc data points)? 
 
-What is the physical interpretation of this uncertainty (ie maybe do a simple calculation to see the time frame in which fire could spread over a whole field to give a sense of scale)? Compare posteriors of parameters to the naive sensitivity approach from firetech paper. 
+Model 1: High uncertainty, possibility of flame spread in very damp grass (MC over .5) is unlikely, suggest need for prior knowledge on Mext leading to model two.
 
-(use this to set up firetech paper) Fire Dynamics Simulator (FDS) is a computiational fluid dynamics code that contains a package for wildland fire spread (ref fds user guide).
+Model 2:
 
-Flame spread versus moisture content to show uncertainty and 95 percent probability interval. Explain use for extrapolating to other moisture contents, more data will decrease uncertainty. Show plots from different models. make analogy to huricane forecasting bands with 95 percent confidence interval. There is a great deal of uncertainty with just the simplified model that has fixed parameters, comment on need for more scenario data to make up for parameters with identifiability issues and need for better models based more on physics and less on correlations.
+Model 3:
 
-Conclude with possibility of extension to more complicated forecasting models for resource allocation.
+DIC Table
+
+Now we choose Model X and remove the estimated moisture content scenario parameters. This model will be reffered to as Model 4.
+
+Model 4: uncertainty in spread and sav? DIC? Where the estimated point outliers in previous models?
+
+What is the physical interpretation of this uncertainty? (ie maybe do a simple calculation to see the time frame in which fire could spread over a whole field to give a sense of scale, andor make analogy to huricane forecasting bands with 95 percent confidence interval) 
+
+Compare 95 percent posterior intervals of parameters to range tested in the naive sensitivity approach from firetech paper. Compare spread rates (add points to previous figures and make new ones).
+
+There is a great deal of uncertainty with just the simplified model that has fixed parameters/informed priors etc, comment on need for more scenario data to make up for parameters with identifiability issues and need for better models based more on physics and less on correlations.
+
+Conclude with possibility of extension to more complicated forecasting models.
 
 \clearpage
 \appendix
