@@ -143,9 +143,9 @@ The following Bayesian modeling and analysis will seek to find the true distribu
 
 Several models will be constructed to estimate the flame spread rate, but first we take an inventory of the available data. From each of the data loggers we have the time at which the flame reached the device. If we consider flame spread in the downwind direction and take only point-to-point observations of the travel time from one device to the next, then the twenty data loggers embeded in a grid on the grass field produce sixteen unique spread rates. Four measurements came from a boundary that could have been affected by nearby trees and will be discarded to focus on grass flame spread. Of the remaining data loggers, one malfunctioned and will also be discarded (Figure~\ref{fig:field}. The result is eleven flame spread rate observations that will be treated as independent assuming that the flame spread rate has reached a quasi-steady state by the time it arrives at the first row of data loggers.
 
-Accompanying each flame spread observation is a preburn moisture content ($M$) measurement of the grass. However, three of these data points are missing so I elected to estimate them from the surrounding measurements. These will remain as point estimates for the purpose of this exercise, but it should be noted that a full model would include uncertainty information for the missing values. These values could also be discarded, and the effect of this will be examined briefly using the best fitting model.
+Accompanying each flame spread observation is a preburn moisture content ($M$) measurement of the grass. However, three of these scenario data points are missing, and can be estimated from the surrounding measurements. These will remain as point estimates for the purpose of this exercise, but it should be noted that a full model would include uncertainty information for the missing values. These values could also be discarded, and the effect of this will be examined briefly using the best fitting model.
 
-The parameters $\sigma$, $M_{ext}$, and $h$ do not have any scenario data and while recommended values are provided by the U.S. Forest Service (ref fuel models) there is no uncertainty information. Prior probability distribution functions will be chosen for each parameter based on the recommended values and compared to diffuse priors. The remaining parameters in Equation~\ref{eq:roth_fun3} ($w_O$, $\delta$, $\rho_p$ and $U$) are irreducable and scenario specific. Unfortunately, these are only available on a field-wide level with limited uncertainty information. Similar to the missing moisture content scenario parameter, a full analysis would include uncertainty models for each of these parameters from field data however they will remain fixed in the following models (see Appendix~\ref{ap:table}).
+The parameters $\sigma$, $M_{ext}$, and $h$ do not have any scenario data and while recommended values are provided by the U.S. Forest Service (ref fuel models) there is no uncertainty information. Prior probability density functions will be chosen for each parameter based on the recommended values and compared to diffuse priors. The remaining parameters in Equation~\ref{eq:roth_fun3} ($w_O$, $\delta$, $\rho_p$ and $U$) are irreducable and scenario specific. Unfortunately, these are only available on a field-wide level with limited uncertainty information. Similar to the missing moisture content scenario parameter, a full analysis would include uncertainty models for each of these parameters from field data however they will remain fixed in the following models (see Appendix~\ref{ap:table}).
 
 Previous research was conducted with a higher order physics-based model focused on testing the sensitivity of flame spread rate to multiple input parameters (ref FireTech). The results of this study suggest that flame spread rate is most sensitive to $\sigma$ and $M$. Therefore, these parameters are the QoIs whose effect on the uncertainty of the flame spread rate is a desired output of the following analysis.
 
@@ -167,16 +167,23 @@ We will define four models with different sets of priors on $\sigma$, $M_{ext}$,
 
 \begin{align}
 \begin{array}{ccc}
-\sigma &\sim& \mathcal{U}(500,50000) \\
 M_{ext} &\sim& \mathcal{U}(0,1) \\
+\sigma &\sim& \mathcal{U}(500,50000) \\
 h &\sim& \mathcal{U}(1,50000)
 \end{array}
 \label{eq:mod1_priors}
 \end{align}
 
-The motivation choosing the following models will be discussed in Section~\ref{sec:res}, and for now we will simply describe their developement. 
+The motivation choosing the following models will be discussed in Section~\ref{sec:res}, and for now we will simply describe their developement. For Model 2, we will illicit prior information on the mean $M_{ext}$ from Scott, et al (cite USFS) and high estimate from ``expert'' opinion. The mean of the $M_{ext}$ values from literature is calculated to be 0.268 and it is estimated that there is a 99\% probability that $M_{ext}$ is less than 0.6. We choose to use a Gamma prior as $M_{ext}$ is a positive value without a clear upper bound. Using this information with the equations for the mean and cumulative distribution function we have two equations and two unknowns and can numerically solve for the parameters $\alpha$ and $\beta$, leading us to the formulation of Model 2.
 
-Model 2 informed Mext
+\begin{align}
+\begin{array}{ccc}
+M_{ext} &\sim& \Gamma(5.6,20.87) \\
+\sigma &\sim& \mathcal{U}(500,50000) \\
+h &\sim& \mathcal{U}(1,50000)
+\end{array}
+\label{eq:mod2_priors}
+\end{align}
 
 Model 3 informed SAV and Mext
 
