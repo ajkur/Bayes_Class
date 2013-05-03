@@ -92,7 +92,7 @@ Bayesian inference offers a means to fit models of physical systems to observed 
 
 Prediction of fire spread is a major concern to wildland fire fighters who use this information construct tactical plans for suppressing and controlling fires. This involves the allocation of resources (personal, command stations, airtankers, etc.) at the appropriate time and location in situations where a poor prediction could cause property damage and put fire fighters and residents lives at risk.
 
-Research efforts in wildland fire modeling have produced models for fire behaviour that range in complexity from algebraic equations to full fluid dynamics and combustion models. This project will focus on the Rothermal flame spread model (ref) that was derived from a combination of fire experiment correlations and physical principles. The result is a set of algebraic equations with eleven input parameters that can be computed quickly. The traditional approach to using the Rothermal model is calculating the flame spread rate using prescribed input parameters based on the fuel type, wind speed, and ground slope. Using this model with Bayesian methods is equivocal to conducting a Bayesian regression where the regression parameters each have a physical meaning, and can therefore be easily examined for non-physical predictions.
+Research efforts in wildland fire modeling have produced models for fire behaviour that range in complexity from algebraic equations to full fluid dynamics and combustion models. This project will focus on the Rothermal flame spread model \cite{rothermel1972mathematical} that was derived from a combination of fire experiment correlations and physical principles. The result is a set of algebraic equations with eleven input parameters that can be computed quickly. The traditional approach to using the Rothermal model is calculating the flame spread rate using prescribed input parameters based on the fuel type, wind speed, and ground slope. Using this model with Bayesian methods is equivocal to conducting a Bayesian regression where the regression parameters each have a physical meaning, and can therefore be easily examined for non-physical predictions.
 
 The scenario used for this study involves a large scale (~30 acres) field burn conducted at Camp Swift near Bastrop in the Spring of 2011 before Texas saw one of the worst fire seasons on record. The field was composed mostly of Little Bluestem grass with pockets of other vegetation interspersed throughout. We instrumented the field with twenty data loggers to track flame spread and temperature. Flame spread rate in the downwind direction was calculated by the time it took the flame to travel from one data logger to the next divided by the distance. Additionally, data was collected on the moisture content of the grass and weather conditions such as ambient temperature, wind speed and direction, and relative humidity. Some of these values correspond to Rothermal model inputs and will be used as scenario parameters when estimating the likelihood of the observed flame spread rates.
 
@@ -145,9 +145,9 @@ Several models will be constructed to estimate the flame spread rate, but first 
 
 Accompanying each flame spread observation is a pre-burn moisture content ($M$) measurement of the grass. These scenario values are calculated as the average moisture content between data logger $i$ and $i+1$. These will remain as point estimates for the purpose of this exercise, but it should be noted that a full model would include uncertainty information for variation in $M$ between the two points. There is the possibility that some of these estimations could be outliers, and the effect of discarding these points will be examined briefly using the best fitting model.
 
-The parameters $\sigma$, $M_{ext}$, and $h$ do not have any scenario data and while recommended values are provided by the U.S. Forest Service (ref fuel models) there is no uncertainty information. Prior probability density functions will be chosen for each parameter based on the recommended values and compared to diffuse priors. The remaining parameters in Equation~\ref{eq:roth_fun3} ($w_O$, $\delta$, $\rho_p$ and $U$) are irreducible and scenario specific. Unfortunately, these are only available on a field-wide level with limited uncertainty information. Similar to the missing moisture content scenario parameter, a full analysis would include uncertainty models for each of these parameters from field data however they will remain fixed in the following models (see Appendix~\ref{ap:table}).
+The parameters $\sigma$, $M_{ext}$, and $h$ do not have any scenario data and while recommended values are provided by the U.S. Forest Service \cite{scott2005standard} there is no uncertainty information. Prior probability density functions will be chosen for each parameter based on the recommended values and compared to diffuse priors. The remaining parameters in Equation~\ref{eq:roth_fun3} ($w_O$, $\delta$, $\rho_p$ and $U$) are irreducible and scenario specific. Unfortunately, these are only available on a field-wide level with limited uncertainty information. Similar to the missing moisture content scenario parameter, a full analysis would include uncertainty models for each of these parameters from field data however they will remain fixed in the following models (see Appendix~\ref{ap:table}).
 
-Previous research was conducted with a higher order physics-based model focused on testing the sensitivity of flame spread rate to multiple input parameters (ref FireTech). The results of this study suggest that flame spread rate is most sensitive to $\sigma$ and $M$. Therefore, these parameters are the QoIs whose effect on the uncertainty of the flame spread rate is a desired output of the following analysis.
+Previous research was conducted with a higher order physics-based model focused on testing the sensitivity of flame spread rate to multiple input parameters \cite{overholtcharacterization}. The results of this study suggest that flame spread rate is most sensitive to $\sigma$ and $M$. Therefore, these parameters are the QoIs whose effect on the uncertainty of the flame spread rate is a desired output of the following analysis.
 
 We may now begin constructing the statistical model for this problem. The likelihood function for each of the models is assumed to be normally distributed with the form
 
@@ -163,7 +163,7 @@ Y_i \sim \mathcal{N}(R_i,\tau^2),\quad i = 1,...,11
 \label{eq:tau_prior}
 \end{equation}
 
-We will define four models with different sets of priors on $\sigma$, $M_{ext}$, and $h$. The first model represents the ``uninformed'' case, however we can not use truly uninformed priors because extreme values result in non-physical rates of spread. Likewise, combinations of extreme non-physical inputs can also produce a physical rate of spread. We must then limit each parameter to a wide physically realistic space. The most ``uninformed'' way to accomplish this is to choose wide uniform priors which is common practice for Bayesian modeling of physical thermal and fluid systems (cite turbulence and combustion papers). The priors for Model 1 are chosen as follows:
+We will define four models with different sets of priors on $\sigma$, $M_{ext}$, and $h$. The first model represents the ``uninformed'' case, however we can not use truly uninformed priors because extreme values result in non-physical rates of spread. Likewise, combinations of extreme non-physical inputs can also produce a physical rate of spread. We must then limit each parameter to a wide physically realistic space. The most ``uninformed'' way to accomplish this is to choose wide uniform priors which is common practice for Bayesian modeling of physical thermal and fluid systems \cite{miki2012bayesian,cheung2011bayesian}. The priors for Model 1 are chosen as follows:
 
 \begin{align}
 \begin{array}{ccc}
@@ -174,7 +174,7 @@ h &\sim& \mathcal{U}(1,50000)
 \label{eq:mod1_priors}
 \end{align}
 
-The motivation choosing the following models will be discussed in Section~\ref{sec:res}, and for now we will simply describe their development. For Model 2, we will elicit prior information on the mean $M_{ext}$ from Scott, et al (cite USFS) and high estimate from ``expert'' opinion. The mean of the $M_{ext}$ values from literature is calculated to be 0.268 and it is estimated that there is a 99\% probability that $M_{ext}$ is less than 0.6. We choose to use a Gamma prior as $M_{ext}$ is a positive value without a clear upper bound. Using this information with the equations for the mean and cumulative distribution function we have two equations and two unknowns and can numerically solve for the parameters $\alpha$ and $\beta$, leading us to the formulation of Model 2.
+The motivation choosing the following models will be discussed in Section~\ref{sec:res}, and for now we will simply describe their development. For Model 2, we will elicit prior information on the mean $M_{ext}$ from Scott, et al \cite{scott2005standard} and high estimate from ``expert'' opinion. The mean of the $M_{ext}$ values from literature is calculated to be 0.268 and it is estimated that there is a 99\% probability that $M_{ext}$ is less than 0.6. We choose to use a Gamma prior as $M_{ext}$ is a positive value without a clear upper bound. Using this information with the equations for the mean and cumulative distribution function we have two equations and two unknowns and can numerically solve for the parameters $\alpha$ and $\beta$, leading us to the formulation of Model 2.
 
 \begin{align}
 \begin{array}{ccc}
@@ -196,7 +196,7 @@ h &\sim& \mathcal{U}(1,50000)
 \label{eq:mod3_priors}
 \end{align}
 
-The final model will be constructed by choosing the best fitting model from the previous three using the deviance information criterion (DIC) and removing the outlying estimated moisture content data points. Note that an informed prior was not considered for the heat of combustion ($h$) as only one value given for all models (cite USFS) and there are a variety measurement techniques that can give significantly different results for the same type of fuel. Without a consistent data source, we can not bring in prior knowledge to improve upon the prescribed uniform distribution. 
+The final model will be constructed by choosing the best fitting model from the previous three using the deviance information criterion (DIC) and removing the outlying estimated moisture content data points. Note that an informed prior was not considered for the heat of combustion ($h$) as only one value given for all models \cite{scott2005standard} and there are a variety measurement techniques that can give significantly different results for the same type of fuel. Without a consistent data source, we can not bring in prior knowledge to improve upon the prescribed uniform distribution. 
 
 These models will be coded in Python using the PyMC module for Bayesian inference and Markov chain sampling methods. All models will use the standard Metropolis-Hastings algorithm to draw samples. Additionally, model code will be provided with the report as an electronic attachment.
 
@@ -222,7 +222,7 @@ To tune the models, we run 10000 iterations with no burn in and thinning to exam
 \label{tab:tune}
 \end{table}
 \newpage
-The goodness of fit is determined by calculating a p-value with Freeman-Tukey statistic (ref brooks2000) provided in PyMC where  
+The goodness of fit is determined by calculating a p-value with Freeman-Tukey statistic \cite{brooks2000bayesian} provided in PyMC where  
 
 \begin{equation}
 D(R|M_{ext},\sigma,h) = \Sigma(\sqrt{R_j} - \sqrt{e_j})^2
@@ -334,7 +334,7 @@ Prediction of flame spread is inherently a difficult problem due to the physics 
 
 Electronic attachment.
 
-% \bibliographystyle{unsrt}
-% \bibliography{./flameBayesBiblio}
+\bibliographystyle{unsrt}
+\bibliography{./flameBayesBiblio}
 
 \end{document}
