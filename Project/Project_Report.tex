@@ -88,7 +88,7 @@
 
 Modeling physical systems requires that we prescribe values for the model parameters based on previous knowledge, correlations, engineering estimations, etc. If we possess expermental data for the system of interest, we can numerically invert for the unknown model parameters. In higher order systems, the solution space may be complicated, and inversion methods can easily get stuck in local minima and maxima. The result of the inversion process is a set of point estimates for the model input parameters. However, it lacks the uncertainty information necessary for activities such as assessing the model's accuracy or conduction a risk assessment.
 
-Bayesian inference offers a means to fit models of physical systems to observed data and calculate the uncertainty in the model parameters. This method assumes that we do not know the true distribution of the input parameters, but we can use observed data to reconstruct it. Given a scenario or collection of scenarios with observed data, Bayesian methods allow us to sample from the true distribution of the data.
+Bayesian inference offers a means to fit models of physical systems to observed data and calculate the uncertainty in the model parameters. This method assumes that we do not know the true distribution of the input parameters, but we can use observed data to reconstruct it. Given a scenario or collection of scenarios with observed data, Bayesian methods allow us to sample from the true distributions of the data and unobserved quantities of interest (QoI, plural QoIs).
 
 Prediction of fire spread is a major concern to wildland fire fighters who use this information construct tactical plans for supressing and controlling fires. This involves the allocation of resources (personal, command stations, airtankers, etc.) at the appropriate time and location in situations where a poor prediction could cause property damage and put fire figheres and residents lives at risk.
 
@@ -137,17 +137,37 @@ The following Bayesian modeling and analysis will seek to find the true distribu
 \begin{center}
 \includegraphics[width=3.0in]{./Figures/field}
 \end{center}
-\caption{Schematic of experimental field. The green dots are data loggers, and the red X represents a broken divice.}
+\caption{Schematic of experimental field. The green dots are data loggers, and the red X represents a broken device.}
 \label{fig:field} 
 \end{figure}
 
-Several models will be constructed to estimate the flame spread rate, but first we take an inventory of the available data. If we consider flame spread in the downwind direction and take only point-to-point observations of the travel time, then the twenty data loggers embeded in a grid on the grass field produce sixteen unique spread rates. Four measurements came from a boundary that could have been affected by nearby trees and will be discarded to focus on grass flame spread. Of the remaining data loggers, one malfunctioned and will also be discarded (Figure~\ref{fig:field}. The result is eleven flame spread rate observations.
+Several models will be constructed to estimate the flame spread rate, but first we take an inventory of the available data. From each of the data loggers we have the time at which the flame reached the device. If we consider flame spread in the downwind direction and take only point-to-point observations of the travel time from one device to the next, then the twenty data loggers embeded in a grid on the grass field produce sixteen unique spread rates. Four measurements came from a boundary that could have been affected by nearby trees and will be discarded to focus on grass flame spread. Of the remaining data loggers, one malfunctioned and will also be discarded (Figure~\ref{fig:field}. The result is eleven flame spread rate observations that will be treated as independent assuming that the flame spread rate has reached a quasi-steady state by the time it arrives at the first row of data loggers.
 
+Accompanying each flame spread observation is a preburn moisture content measurement of the grass. However, three of these data points are missing so I elected to estimate them from the surrounding measurements. These will remain as point estimates for the purpose of this exercise, but it should be noted that a full model would include uncertainty information for the missing values. These values could also be discarded, and the effect of this will be examined briefly using the best fitting model.
 
+The parameters $\sigma$, $M_{ext}$, and $h$ do not have any scenario data and will be given prior probability distribution functions. The remaining parameters in Equation~\ref{eq:roth_fun3} ($w_O$, $\delta$, $\rho_p$ and $U$) are irreducable and scenario specific. Unfortunately, these are only available on a field-wide level with limited uncertainty information. Similar to the missing moisture content scenario parameter, a full analysis would include uncertainty models for each of these parameters from field data however they will remain fixed in the following models (see Appendix~\ref{ap:table}).
 
-Describe data, spread, moisture (mention estimated data, and that in reality you should account for the uncertainty in these estimates) etc.
+Previous research was conducted with a higher order physics-based model focused on testing the sensitivity of flame spread rate to multiple input parameters (ref FireTech). The results of this study suggest that flame spread rate is most sensitive to $\sigma$ and $M$. Therefore, these parameters are the QoIs whose effect on the uncertainty of the flame spread rate is a desired output of the following analysis.
+
+We may now begin constructing the statistical model for this problem. The likelihood function for each of the models is assumed to be normally distributed with the form
+
+\begin{equation}
+Y_i \sim \mathcal{N}(R_i,\tau^2),\quad i = 1,...,11
+\label{eq:like}
+\end{equation}
+
+\noindent where $Y_i$ is an observation of the spread rate, $R_i$ is the spread rate calculated from Equation~\ref{eq:roth_fun3}, and the prior distribution for $\tau$ is
+
+\begin{equation}
+\tau \sim \mathcal{U}(0,100)
+\label{eq:tau_prior}
+\end{equation}
+
+Four models with different priors
 
 Describe unknown parameters. describe priors (uniform for first cut, if time allows consider estimate betas or normals from literature(expert opinions))
+
+End with a list of models: all uniform, beta mext, all betas from literature, best of previous three without estimated mcs.
 
 Paste in some code maybe. ref appendix
 
@@ -162,13 +182,33 @@ What is the physical interpretation of this uncertainty (ie maybe do a simple ca
 
 (use this to set up firetech paper) Fire Dynamics Simulator (FDS) is a computiational fluid dynamics code that contains a package for wildland fire spread (ref fds user guide).
 
-Flame spread versus moisture content to show uncertainty and 95 percent probability interval. Explain use for extrapolating to other moisture contents, more data will decrease uncertainty. Show plots from different models. make analogy to huricane forecasting bands with 95 percent confidence interval.
+Flame spread versus moisture content to show uncertainty and 95 percent probability interval. Explain use for extrapolating to other moisture contents, more data will decrease uncertainty. Show plots from different models. make analogy to huricane forecasting bands with 95 percent confidence interval. There is a great deal of uncertainty with just the simplified model that has fixed parameters, comment on need for more scenario data to make up for parameters with identifiability issues and need for better models based more on physics and less on correlations.
 
 Conclude with possibility of extension to more complicated forecasting models for resource allocation.
 
 \clearpage
 \appendix
 \section{Appendix: Rothermal Input Parameters}
+\label{ap:table}
+
+\begin{table}[h]
+\caption{PARAMETERS}
+\begin{center}
+  \begin{tabular}{cccc}
+    \hline\noalign{\smallskip}
+    Parameter & Symbol & Value & Units \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+    Front (Flame) Side Temperature & $T_\infty$ & $K$\\
+    Flame Side Heat Transfer Coefficient & $h$ & $\frac{W}{m^2K}$\\ 
+    Material Specific Heat & $c$ & $\frac{J}{kgK}$\\ 
+    Material Conductivity & $k$ & $\frac{W}{mK}$\\ 
+    Back Side Gas Temperature & $T_{\infty,b}$ & $K$\\ 
+    Back Side Heat Transfer Coefficient & $h_b$ & $\frac{W}{m^2K}$\\ 
+    \noalign{\smallskip}\hline
+  \end{tabular}
+\end{center}
+\label{tab:para}
+\end{table}
 
 \section{Appendix: PyMC Model Code}
 
