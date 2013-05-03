@@ -221,7 +221,7 @@ To tune the models, we run 10000 iterations with no burn in and thinning to exam
 \end{center}
 \label{tab:tune}
 \end{table}
-
+\newpage
 The goodness of fit is determined by calculating a p-value with Freeman-Tukey statistic (ref brooks2000) provided in PyMC where  
 
 \begin{equation}
@@ -232,11 +232,11 @@ D(R|M_{ext},\sigma,h) = \Sigma(\sqrt{R_j} - \sqrt{e_j})^2
 \noindent and
 
 \begin{equation}
-p = PR[D(R_{sim}|M_{ext},\sigma,h) > D(R_{obs}|M_{ext},\sigma,h)]
+p = Pr[D(R_{sim}|M_{ext},\sigma,h) > D(R_{obs}|M_{ext},\sigma,h)]
 \label{eq:p_val}
 \end{equation}
 
-These values are listed in Table~\ref{tab:dic} along with the DIC for each fitted model. The p-values indicate that there is no lack of fit for each of the proposed models and the DIC indicates that Model 2 is the best of the three. To understand why this might be the case we visually examine the fire spread rate versus moisture content for values of $M_{ext}$, $\sigma$, and $h$ drawn from their posterior distributions.
+These values are listed in Table~\ref{tab:dic} along with the DIC for each fitted model. The p-values indicate that there is no lack of fit for each of the proposed models and the DIC indicates that Model 2 is the best of the three. To understand why this might be the case we visually examine the flame spread rate versus moisture content for values of $M_{ext}$, $\sigma$, and $h$ drawn from their posterior distributions.
 
 \begin{table}[h]
 \caption{DIC for Models 1-3. consider including some confidince intervals}
@@ -254,7 +254,7 @@ These values are listed in Table~\ref{tab:dic} along with the DIC for each fitte
 \label{tab:dic}
 \end{table}
 
-Model 1: High uncertainty, possibility of flame spread in very damp grass (MC over .5) is unlikely, suggest need for prior knowledge on Mext leading to model two.
+Figures~\ref{fig:m1_rate}-\ref{fig:m3_rate} show the flame spread rate versus moisture content where the blue dots are observed data from experiments; the green line is the spread rate calculated with the posterior mean values of $M_{ext}$, $\sigma$, and $h$; and the gray lines are replications sampled from the posterior distributions of the input parameters. The replications can be thought of as analogous to the uncertainty bands placed on the prediction of hurricane or storm movements given the output of a weather model. to We can see that there is high uncertainty in the spread rate for moisture content values between 0.4 and 0.5 (Figure~\ref{fig:m1_rate}), this is equivalent to flame spread occuring in very damp grass which we know to be physically unlikely. Upon further examination of the posterior output, we see that the 95\% probability interval for $M_{ext}$ is [0.22, 0.98] which is very large and includes physically unlikely values. This suggest the need to illicit prior information on $M_{ext}$.
 
 \begin{figure}[h]
 \begin{center}
@@ -264,7 +264,7 @@ Model 1: High uncertainty, possibility of flame spread in very damp grass (MC ov
 \label{fig:m1_rate} 
 \end{figure}
 
-Model 2:
+For Model 2, we have placed an informative prior on $M_{ext}$ which results in a decrease in the probability that flame spread will occur at high moisture content and better capturing of the observed data compared to Model 1 as indicated by the gray replication bands (Figure~\ref{fig:m2_rate}). We sought to bring in more information for model 3 by illiciting prior information on $h$, however we can see that the model does not capture outlying spread rates (Figure~\ref{fig:m3_rate}). This trend is also evident in the values of the DIC (Table~\ref{tab:dic}), which supports our observations that Model 2 is indeed the best choice. 
 
 \begin{figure}[h]
 \begin{center}
@@ -274,8 +274,6 @@ Model 2:
 \label{fig:m2_rate} 
 \end{figure}
 
-Model 3:
-
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=3.0in]{./Figures/mod_three/spread_rate}
@@ -284,27 +282,24 @@ Model 3:
 \label{fig:m3_rate} 
 \end{figure}
 
+Now we use Model 2 and remove the outlying moisture content scenario parameters. This model will be reffered to as Model 4. A quick calculation of the absolute residuals reveals that there are two possible outliers. Fitting the model yields a p-value of 0.581 indicating that there is no overall lack of fit. Using the DIC to compare Model 2 and Model 4 is not appropriate as they have different data sets, so we will examine the flame spread rate versus moisture content plot (Figure~\ref{fig:m4_rate}). For Model 4, all data points are included within the range of replication curves indicating a good fit to the data, however there is large uncertainty as the mositure content approaches zero indicating completely dry grass. 
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=3.0in]{./Figures/mod_four/spread_rate}
+\end{center}
+\caption{Flame spread rate vs. moisture content for Model 4 (data with outliers removed).}
+\label{fig:m4_rate} 
+\end{figure}
 
-Now we choose Model X and remove the estimated moisture content scenario parameters. This model will be reffered to as Model 4.
+% Model 4
+% Bayesian p-value: p=0.581
+% DIC 7.62
 
-Model 4: uncertainty in spread and sav? DIC? Where the estimated point outliers in previous models?
+% Compare 95 percent posterior intervals of parameters to range tested in the naive sensitivity approach from firetech paper. Compare spread rates (add points to previous figures and make new ones). do this some other time, maybe for a paper
 
-% \begin{figure}[h]
-% \begin{center}
-% \includegraphics[width=3.0in]{./Figures/mod_four/spread_rate}
-% \end{center}
-% \caption{Flame spread rate vs. moisture content for Model 4.}
-% \label{fig:m4_rate} 
-% \end{figure}
+Prediction of flame spread is inherently a difficult problem due to the physics involved and it is of great importance during fire danger weather (low moisture content, high wind speeds). The data used for this study was not collected during fire danger weather and the inclusion of spread measurements at a higher range of moisture contents could help to decrease the uncertainty of the model predictions. To accurately assess the true uncertainty of the model, future experiments could include scenario data for the parameters that were held constant in this exercise. The true uncertainty is likely greater than the estimates presented in this report, however it offers a framework for continuing Bayesian analysis on larger and more robust fire ground data sets. This framework could then be extended to more complicated flame spread models with better representation of the physics than the Rothermal model.
 
-What is the physical interpretation of this uncertainty? (ie maybe do a simple calculation to see the time frame in which fire could spread over a whole field to give a sense of scale, andor make analogy to huricane forecasting bands with 95 percent confidence interval) 
-
-Compare 95 percent posterior intervals of parameters to range tested in the naive sensitivity approach from firetech paper. Compare spread rates (add points to previous figures and make new ones).
-
-There is a great deal of uncertainty with just the simplified model that has fixed parameters/informed priors etc, comment on need for more scenario data to make up for parameters with identifiability issues and need for better models based more on physics and less on correlations.
-
-Conclude with possibility of extension to more complicated forecasting models.
 
 \clearpage
 \appendix
@@ -336,6 +331,8 @@ Conclude with possibility of extension to more complicated forecasting models.
 \end{table}
 
 \section{Appendix: PyMC Model Code}
+
+Electronic attachment.
 
 % \bibliographystyle{unsrt}
 % \bibliography{./flameBayesBiblio}

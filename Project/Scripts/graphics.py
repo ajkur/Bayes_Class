@@ -26,6 +26,28 @@ def plot_spread_mc(m, color='green', label='Spread Rate'):
     pl.plot(MC, pl.mean(y_trace, axis=0), color=color, linewidth=5, label=label)
     decorate_plot()
 
+def plot_spread_mc_nes(m, color='green', label='Spread Rate'):
+    """Tool for plotting spread rate vs MC for each realization."""
+    MC = pl.arange(0., 0.51, .01)
+    y_trace = []
+    sigList = []
+    hocList = []
+    mExtList = []
+    for modSig in m.modSig.trace():
+        sigList.append(modSig)
+    for hoc in m.hoc.trace():
+        hocList.append(hoc)
+    for mExt in m.mExt.trace():
+        mExtList.append(mExt)
+
+    for i in range(len(sigList)):
+        y = roth.flameSpread(sigma=sigList[i], bulk=data.meanBulk, hoc=hocList[i], moist=MC, mExt=mExtList[i])
+        pl.plot(MC, y, color='gray', alpha=.75, zorder=-1)
+        y_trace.append(y)
+    pl.plot(data.nes_mcs, data.nes_rates, 'bo', label='Experiment')
+    pl.plot(MC, pl.mean(y_trace, axis=0), color=color, linewidth=5, label=label)
+    decorate_plot()
+
 def plot_spread_mc_shift(m, color='green', label='Spread Rate'):
     """Tool for plotting spread rate vs MC for each realization."""
     MC = pl.arange(0., 0.51, .01)

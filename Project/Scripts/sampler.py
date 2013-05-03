@@ -10,7 +10,7 @@ import roth
 import data
 
 dicList = []
-for modNum in range(3,4):
+for modNum in range(4,5):
 
     if modNum == 1:
         # Generate model and fit model
@@ -113,7 +113,7 @@ for modNum in range(3,4):
         vars = models.model_four()
         m4 = mc.MCMC(vars)
         # m4.use_step_method(mc.AdaptiveMetropolis, [m4.modSig,m4.hoc,m4.mExt])
-        m4.sample(iter=50000, burn=25000, thin=50)
+        m4.sample(iter=56000, burn=6000, thin=50)
         # m4.sample(iter=10000, burn=0, thin=1) # Test run
         # print m4.summary()
         # print 'DIC=%f' % m4.dic
@@ -124,14 +124,14 @@ for modNum in range(3,4):
 
         # plot sp vs mc here
         pl.figure(figsize=(12,9))
-        graphics.plot_spread_mc(m4)
+        graphics.plot_spread_mc_nes(m4)
         pl.savefig('../Figures/mod_four/spread_rate.pdf')
 
         # Write posterior output
         m4.write_csv("../Figures/mod_four/reg_out.csv")
 
-        # D = mc.discrepancy(1/(1+np.exp(-data.rates)), 1/(1+np.exp(-m4.y_sim.trace())), 1/(1+np.exp(-m4.y_mean.trace())))
-        # mc.Matplot.discrepancy_plot(D, name='D', format='pdf', path='../Figures/mod_four', report_p=True)
+        D = mc.discrepancy(1/(1+np.exp(-data.nes_rates)), 1/(1+np.exp(-m4.y_sim.trace())), 1/(1+np.exp(-m4.y_mean.trace())))
+        mc.Matplot.discrepancy_plot(D, name='D', format='pdf', path='../Figures/mod_four', report_p=True)
 
 print dicList
 # Plot only scenario data and spread rates
