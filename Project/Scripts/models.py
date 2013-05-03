@@ -27,6 +27,11 @@ def uniform_priors():
                       tau=sigma**-2,
                       observed=True)
 
+    # Add a data posterior prediction deterministic
+    @mc.deterministic
+    def y_sim(mu=y_mean, sigma=sigma):
+        return mc.rnormal(mu, sigma**-2)
+
     return vars()
 
 def model_two():
@@ -52,6 +57,11 @@ def model_two():
                       tau=sigma**-2,
                       observed=True)
 
+    # Add a data posterior prediction deterministic
+    @mc.deterministic
+    def y_sim(mu=y_mean, sigma=sigma):
+        return mc.rnormal(mu, sigma**-2)
+
     return vars()
 
 def model_three():
@@ -76,6 +86,11 @@ def model_three():
                       mu=y_mean,
                       tau=sigma**-2,
                       observed=True)
+
+    # Add a data posterior prediction deterministic
+    @mc.deterministic
+    def y_sim(mu=y_mean, sigma=sigma):
+        return mc.rnormal(mu, sigma**-2)
 
     return vars()
 
